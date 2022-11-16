@@ -6,12 +6,16 @@ import sbw.project.cli.action.command.misc.CommandDoExit;
 
 public class CommandParser{
 
+    public ActionSet actionSet;
+    public String command;
+
     // create your parser
     // the ActionSet and command string are provided to you automatically.
     // do not do the parsing here
     public CommandParser(ActionSet actionSet, String command){
 
-
+        this.actionSet = actionSet;
+        this.command = command;
 
     }
 
