@@ -1,16 +1,24 @@
 import sbw.architecture.datatype.*;
 import sbw.project.cli.CommandLineInterface;
+import sbw.project.cli.action.ActionCreational;
 import sbw.project.cli.action.ActionSet;
 import sbw.project.cli.action.ActionMiscellaneous;
 import sbw.project.cli.action.command.misc.CommandDoExit;
 
 public class CommandParser{
 
+    public ActionSet actionSet;
+    public String command;
+
     // create your parser
     // the ActionSet and command string are provided to you automatically.
     // do not do the parsing here
     public CommandParser(ActionSet actionSet, String command){
-        
+
+        this.actionSet = actionSet;
+        this.actionCreational = actionSet.getActionCreational();
+        this.command = command;
+
     }
 
     // do the parsing
@@ -128,7 +136,7 @@ public class CommandParser{
     //         this calls doCreateAileron(), which creates and registers an instance of 'ActuatorAileron'
     public void createAileron(Identifier id, Angle angle1, Angle angle2, Speed speed, Acceleration acceleration){
 
-
+        actionCreational.doCreateAileron(id, angle1, angle2, speed, acceleration);
 
     }
 
@@ -138,7 +146,7 @@ public class CommandParser{
     //         this calls doCreateEngine(), which creates and registers an instance of 'ActuatorEngine'
     public void createEngine(Identifier id, Speed speed, Acceleration acceleration){
 
-
+        actionCreational.doCreateEngine(id, speed, acceleration);
 
     }
 
