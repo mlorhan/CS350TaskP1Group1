@@ -79,9 +79,9 @@ public class CommandParser{
             } else if(commandSplit[3].equalsIgnoreCase("FLAP")){
                 //call submitCommand() with an instance of CommandDoSetFlaps
             } else if(commandSplit[3].equalsIgnoreCase("POWER")){
-                if(commandSplit.length == 5){
+                if(commandSplit.length == 5 || ((commandSplit.length > 5) && (commandSplit[5].startWith("//")))){
                     //call submitCommand() with an instance of CommandDoSetEnginePowerAll
-                } else if(commandSplit.length == 7){
+                } else if(commandSplit.length >= 7){
                     //call submitCommand() with an instance of CommandDoSetEnginePowerSingle
                 } else {
                     System.out.println("SET POWER command has incorrect length");
@@ -96,7 +96,7 @@ public class CommandParser{
             //call submitCommand() with an instance of CommandDoHalt
         } else if(commandSplit[0].charAt(0).equals("@")){ //MISCELLANEOUS COMMANDS
             if(commandSplit[0].equalsIgnoreCase("@CLOCK")){
-                if(commandSplit.length == 2){
+                if(commandSplit.length == 2 || ((commandSplit.length > 2) && (commandSplit[2].startWith("//")))){
                     boolean isNumer;
                     try {
                         double d = Double.parseDouble(commandSplit[1]);
@@ -107,10 +107,10 @@ public class CommandParser{
                     if(isNumber == true) {
                         //call submitCommand() with an instance of CommandDoSetClockRate
                     } else {
-                        //I may need to split this up even more to account for puase|resume|update
+                        //I may need to split this up even more to account for pause|resume|update
                         //call submitCommand() with an instance of CommandDoSetClockRunning or CommandDoClockUpdate
                     }
-                } else if(commandSplit.length == 1){
+                } else if(commandSplit.length == 1 || ((commandSplit.length > 1) && (commandSplit[1].startWith("//")))){
                     //call submitCommand() with an instance of CommandDoShowClock
                 } else {
                     System.out.println("Invalid @CLOCK input length");
