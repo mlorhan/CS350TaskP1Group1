@@ -170,6 +170,24 @@ public class CommandParser{
 
     }
 
+    // Input: CREATE RUDDER <id> WITH LIMIT <angle> SPEED <speed> ACCELERATION <acceleration>
+    // Action: Creates an ActuatorRudder with identifier id that deflects angle degrees left (negative) or right (positive) from neutral (0 degrees) at maximum speed speed and acceleration acceleration.
+    //         This calls doCreateRudder(), which creates and registers an instance of ActuatorRudder.
+    public void createRudder(Identifier id, Angle angle, Speed speed, Acceleration acceleration){
+
+        actionCreational.doCreateRudder(id, angle, speed, acceleration);
+
+    }
+
+    // Input: CREATE ELEVATOR <id> WITH LIMIT <angle> SPEED <speed> ACCELERATION <acceleration> 
+    // Action: Creates an ActuatorElevator with identifier id that deflects angle degrees up (positive) or down (negative) from neutral (0 degrees) at maximum speed speed and acceleration acceleration.
+    //         This calls doCreateElevator(), which creates and registers an instance of ActuatorElevator.
+    public void createElevator(Identifier id, Angle angle, Speed speed, Acceleration acceleration){
+
+        actionCreational.doCreateelevator(id, angle, speed, acceleration);
+
+    }
+
     // Input: CREATE AILERON <id> WITH LIMIT UP <angle1> DOWN <angle2> SPEED <speed> ACCELERATION <acceleration>
     // Action: creates an 'ActuatorAileron' with identifier 'id' that deflects 'angle1' degrees up (positive) from neutral (0 degrees) and 'angle2' degrees down (negative) at maximum speed 'speed' and acceleration 'acceleration'
     //         this calls doCreateAileron(), which creates and registers an instance of 'ActuatorAileron'
