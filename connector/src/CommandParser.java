@@ -23,7 +23,8 @@ public class CommandParser{
 
     // do the parsing
     public void parse(){
-        String[] commandSplit = getText().split(" ", 0);
+        //" +" is RegEx that should make it so empty strings are not included in the string array
+        String[] commandSplit = getText().split(" +", 0);
 
         if(commandSplit[0].equals("CREATE")){ //CREATIONAL COMMANDS
             if(commandSplit[1].equals("RUDDER")){
@@ -31,7 +32,7 @@ public class CommandParser{
             } else if(commandSplit[1].equals("ELEVATOR")){
                 //call doCreateElevator()
             } else if(commandSplit[1].equals("AILERON")){
-                //call doCreateAileron()
+                //createAileron(id, angle1, angle2, speed, acceleration);
             } else if(commandSplit[1].equals("SPLIT")){
                 //call doCreateFlap()
             } else if(commandSplit[1].equals("FOWLER")){
