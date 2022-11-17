@@ -23,63 +23,72 @@ public class CommandParser{
 
     // do the parsing
     public void parse(){
-        //" +" is RegEx that should make it so empty strings are not included in the string array
-        String[] commandSplit = getText().split(" +", 0);
+        //split the input by semicolon so multiple commands can be entered with one input
+        String[] semiSplit = getText().split(";");
 
+        //for each command, split the command by spaces and figure out what each command is trying to do
+        for(int i = 0; i < semiSplit.length; i++){
+            //" +" is RegEx that should make it so empty strings are not included in the string array
+            String[] commandSplit = getText().split(" +", 0);
+            parseHelper(commandSplit);
+        }
+    }
+
+    public void parseHelper(String[] commandSplit){
         if(commandSplit[0].equalsIgnoreCase("CREATE")){ //CREATIONAL COMMANDS
             if(commandSplit[1].equalsIgnoreCase("RUDDER")){
                	//CREATE RUDDER <id> WITH LIMIT <angle> SPEED <speed> ACCELERATION <acceleration>
-                String id = commandSplit[2];
-                double limit = Double.parseDouble(commandSplit[5]);
-                double speed = Double.parseDouble(commandSplit[7]);
-                double acceleration = Double.parseDouble(commandSplit[9]);
+                Identifier id = commandSplit[2];
+                Angle limit = Double.parseDouble(commandSplit[5]);
+                Speed speed = Double.parseDouble(commandSplit[7]);
+                Acceleration acceleration = Double.parseDouble(commandSplit[9]);
                 //createRudder(id, limit, speed, acceleration);
             } else if(commandSplit[1].equalsIgnoreCase("ELEVATOR")){
                 //CREATE ELEVATOR <id> WITH LIMIT <angle> SPEED <speed> ACCELERATION <acceleration>
-                String id = commandSplit[2];
-                double limit = commandSplit[5];
-                double speed = commandSplit[7];
-                double acceleration = commandSplit[9];
+                Identifier id = commandSplit[2];
+                Angle limit = commandSplit[5];
+                Speed speed = commandSplit[7];
+                Acceleration acceleration = commandSplit[9];
                 //createElevator(id, limit, speed, acceleration);
             } else if(commandSplit[1].equalsIgnoreCase("AILERON")){
                 //CREATE AILERON <id> WITH LIMIT UP <angle1> DOWN <angle2> SPEED <speed> ACCELERATION <acceleration> 
-                String id = commandSplit[2];
-                double limitUp = Double.parseDouble(commandSplit[6]);
-                double limitDown = Double.parseDouble(commandSplit[8]);
-                double speed = Double.parseDouble(commandSplit[10]);
-                double acceleration = Double.parseDouble(commandSplit[12]);
+                Identifier id = commandSplit[2];
+                Angle limitUp = Double.parseDouble(commandSplit[6]);
+                Angle limitDown = Double.parseDouble(commandSplit[8]);
+                Speed speed = Double.parseDouble(commandSplit[10]);
+                Acceleration acceleration = Double.parseDouble(commandSplit[12]);
                 //createAileron(id, limitUp, limitDown, speed, acceleration);
             } else if(commandSplit[1].equalsIgnoreCase("SPLIT")){
                 //CREATE SPLIT FLAP <id> WITH LIMIT <angle> SPEED <speed> ACCELERATION <acceleration>
-                String id = commandSplit[3];
-                double limit = commandSplit[6];
-                double speed = commandSplit[8];
-                double acceleration = commandSplit[10];
+                Identifier id = commandSplit[3];
+                Angle limit = commandSplit[6];
+                Speed speed = commandSplit[8];
+                Acceleration acceleration = commandSplit[10];
                 //createFlap(id, limit, speed, acceleration)
             } else if(commandSplit[1].equalsIgnoreCase("FOWLER")){
                 //CREATE FOWLER FLAP <id> WITH LIMIT <angle> SPEED <speed> ACCELERATION <acceleration>
-                String id = commandSplit[3];
-                double limit = commandSplit[6];
-                double speed = commandSplit[8];
-                double acceleration = commandSplit[10];
+                Identifier id = commandSplit[3];
+                Angle limit = commandSplit[6];
+                Speed speed = commandSplit[8];
+                Acceleration acceleration = commandSplit[10];
                 //createFlap(id, limit, speed, acceleration);
             } else if(commandSplit[1].equalsIgnoreCase("ENGINE")){
                 //CREATE ENGINE <id> WITH SPEED <speed> ACCELERATION <acceleration>
-                String id = commandSplit[2];
-                double limit = commandSplit[5];
-                double acceleration = commandSplit[7];
+                Identifier id = commandSplit[2];
+                Speed speed = commandSplit[5];
+                Acceleration acceleration = commandSplit[7];
                 //createEngine(id, speed, acceleration);
             } else if(commandSplit[1].equalsIgnoreCase("NOSE")){
                 //CREATE NOSE GEAR <id> WITH SPEED <speed> ACCELERATION <acceleration>
-                String id = commandSplit[3];
-                double speed = commandSplit[6];
-                double acceleration = commandSplit[8];
+                Identifier id = commandSplit[3];
+                Speed speed = commandSplit[6];
+                Acceleration acceleration = commandSplit[8];
                 //createGearNose(id, speed, acceleration);
             } else if(commandSplit[1].equalsIgnoreCase("MAIN")){
                 //CREATE MAIN GEAR <id> WITH SPEED <speed> ACCELERATION <acceleration> 
-                String id = commandSplit[3];
-                double speed = commandSplit[6];
-                double acceleration = commandSplit[8];
+                Identifier id = commandSplit[3];
+                Speed speed = commandSplit[6];
+                Acceleration acceleration = commandSplit[8];
                 //createGearMain(id, speed, acceleration);
             } else {
                 throw new IOException("Invalid CREATE command input");
@@ -166,8 +175,6 @@ public class CommandParser{
         } else {
             throw new IOException("Invalid command input");
         }
-
-
     }
 
     // Input: CREATE RUDDER <id> WITH LIMIT <angle> SPEED <speed> ACCELERATION <acceleration>
