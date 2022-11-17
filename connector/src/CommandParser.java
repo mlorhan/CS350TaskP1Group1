@@ -44,7 +44,7 @@ public class CommandParser{
             } else if(commandSplit[1].equalsIgnoreCase("MAIN")){
                 //call doCreateGearMain()
             } else {
-                System.out.println("Invalid CREATE command input");
+                throw new IOException("Invalid CREATE command input");
             }
 
         } else if(commandSplit[0].equalsIgnoreCase("DECLARE")){ //STRUCTURAL COMMANDS
@@ -63,7 +63,7 @@ public class CommandParser{
             } else if(commandSplit[1].equalsIgnoreCase("BUS")){
                 //call doDeclareBus()
             } else {
-                System.out.println("Invalid CREATE command input");
+                throw new IOException("Invalid DECLARE command input");
             }
         } else if(commandSplit[0].equalsIgnoreCase("COMMIT")){ //BEHAVIORAL COMMANDS
             //call doCommit()
@@ -84,12 +84,12 @@ public class CommandParser{
                 } else if(commandSplit.length >= 7){
                     //call submitCommand() with an instance of CommandDoSetEnginePowerSingle
                 } else {
-                    System.out.println("SET POWER command has incorrect length");
+                    throw new IOException("SET POWER command has incorrect length");
                 }
             } else if(commandSplit[2].equalsIgnoreCase("GEAR")){
                 //call submitCommand() with an instance of CommandDoSelectGear
             } else {
-                System.out.println("Invalid DO command input");
+                throw new IOException("Invalid DO command input");
             }
 
         } else if(commandSplit[0].equalsIgnoreCase("HALT")){
@@ -113,7 +113,7 @@ public class CommandParser{
                 } else if(commandSplit.length == 1 || ((commandSplit.length > 1) && (commandSplit[1].startWith("//")))){
                     //call submitCommand() with an instance of CommandDoShowClock
                 } else {
-                    System.out.println("Invalid @CLOCK input length");
+                    throw new IOException("Invalid @CLOCK input length");
                 }
             } else if(commandSplit[0].equalsIgnoreCase("@RUN")){
                 //call submitCommand() with an instance of CommandDoRunCommandFile
@@ -122,11 +122,11 @@ public class CommandParser{
             } else if(commandSplit[0].equalsIgnoreCase("@WAIT")){
                 //call submitCommand() with an instance of commandDoWait
             } else {
-                System.out.println("Invalid @ command");
+                throw new IOException("Invalid MISCELLANEOUS command");
             }
 
         } else {
-            System.out.println("Invalid command input");
+            throw new IOException("Invalid command input");
         }
 
 
