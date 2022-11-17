@@ -26,59 +26,59 @@ public class CommandParser{
         //" +" is RegEx that should make it so empty strings are not included in the string array
         String[] commandSplit = getText().split(" +", 0);
 
-        if(commandSplit[0].equals("CREATE")){ //CREATIONAL COMMANDS
-            if(commandSplit[1].equals("RUDDER")){
+        if(commandSplit[0].equalsIgnoreCase("CREATE")){ //CREATIONAL COMMANDS
+            if(commandSplit[1].equalsIgnoreCase("RUDDER")){
                 //call doCreateRudder()
-            } else if(commandSplit[1].equals("ELEVATOR")){
+            } else if(commandSplit[1].equalsIgnoreCase("ELEVATOR")){
                 //call doCreateElevator()
-            } else if(commandSplit[1].equals("AILERON")){
+            } else if(commandSplit[1].equalsIgnoreCase("AILERON")){
                 //createAileron(id, angle1, angle2, speed, acceleration);
-            } else if(commandSplit[1].equals("SPLIT")){
+            } else if(commandSplit[1].equalsIgnoreCase("SPLIT")){
                 //call doCreateFlap()
-            } else if(commandSplit[1].equals("FOWLER")){
+            } else if(commandSplit[1].equalsIgnoreCase("FOWLER")){
                 //call doCreateFlap()
-            } else if(commandSplit[1].equals("ENGINE")){
+            } else if(commandSplit[1].equalsIgnoreCase("ENGINE")){
                 //call doCreateEngine()
-            } else if(commandSplit[1].equals("NOSE")){
+            } else if(commandSplit[1].equalsIgnoreCase("NOSE")){
                 //call doCreateGearNose()
-            } else if(commandSplit[1].equals("MAIN")){
+            } else if(commandSplit[1].equalsIgnoreCase("MAIN")){
                 //call doCreateGearMain()
             } else {
                 System.out.println("Invalid CREATE command input");
             }
 
-        } else if(commandSplit[0].equals("DECLARE")){ //STRUCTURAL COMMANDS
-            if(commandSplit[1].equals("RUDDER")){
+        } else if(commandSplit[0].equalsIgnoreCase("DECLARE")){ //STRUCTURAL COMMANDS
+            if(commandSplit[1].equalsIgnoreCase("RUDDER")){
                 //call doDeclareRudderController()
-            } else if(commandSplit[1].equals("ELEVATOR")){
+            } else if(commandSplit[1].equalsIgnoreCase("ELEVATOR")){
                 //call doDeclareElevatorController()
-            } else if(commandSplit[1].equals("AILERON")){
+            } else if(commandSplit[1].equalsIgnoreCase("AILERON")){
                 //call doDeclareAileronController()
-            } else if(commandSplit[1].equals("FLAP")){
+            } else if(commandSplit[1].equalsIgnoreCase("FLAP")){
                 //call doDeclareFlapController()
-            } else if(commandSplit[1].equals("ENGINE")){
+            } else if(commandSplit[1].equalsIgnoreCase("ENGINE")){
                 //call doDeclareEngineController()
-            } else if(commandSplit[1].equals("GEAR")){
+            } else if(commandSplit[1].equalsIgnoreCase("GEAR")){
                 //call doDeclareGearController()
-            } else if(commandSplit[1].equals("BUS")){
+            } else if(commandSplit[1].equalsIgnoreCase("BUS")){
                 //call doDeclareBus()
             } else {
                 System.out.println("Invalid CREATE command input");
             }
-        } else if(commandSplit[0].equals("COMMIT")){ //BEHAVIORAL COMMANDS
+        } else if(commandSplit[0].equalsIgnoreCase("COMMIT")){ //BEHAVIORAL COMMANDS
             //call doCommit()
-        } else if(commandSplit[0].equals("DO")){
-            if(commandSplit[3].equals("RUDDER")){
+        } else if(commandSplit[0].equalsIgnoreCase("DO")){
+            if(commandSplit[3].equalsIgnoreCase("RUDDER")){
                 //call submitCommand() with an instance of CommandDoDeflectRudder
-            } else if(commandSplit[3].equals("ELEVATOR")){
+            } else if(commandSplit[3].equalsIgnoreCase("ELEVATOR")){
                 //call submitCommand() with an instance of CommandDoDeflectElevator
-            } else if(commandSplit[3].equals("AILERONS")){
+            } else if(commandSplit[3].equalsIgnoreCase("AILERONS")){
                 //call submitCommand() with an instance of CommandDoDeflectAilerons
-            } else if(commandSplit[3].equals("BRAKE")){
+            } else if(commandSplit[3].equalsIgnoreCase("BRAKE")){
                 //call submitCommand() with an instance of CommandDoDeploySpeedBrake
-            } else if(commandSplit[3].equals("FLAP")){
+            } else if(commandSplit[3].equalsIgnoreCase("FLAP")){
                 //call submitCommand() with an instance of CommandDoSetFlaps
-            } else if(commandSplit[3].equals("POWER")){
+            } else if(commandSplit[3].equalsIgnoreCase("POWER")){
                 if(commandSplit.length == 5){
                     //call submitCommand() with an instance of CommandDoSetEnginePowerAll
                 } else if(commandSplit.length == 7){
@@ -86,16 +86,16 @@ public class CommandParser{
                 } else {
                     System.out.println("SET POWER command has incorrect length");
                 }
-            } else if(commandSplit[2].equals("GEAR")){
+            } else if(commandSplit[2].equalsIgnoreCase("GEAR")){
                 //call submitCommand() with an instance of CommandDoSelectGear
             } else {
                 System.out.println("Invalid DO command input");
             }
 
-        } else if(commandSplit[0].equals("HALT")){
+        } else if(commandSplit[0].equalsIgnoreCase("HALT")){
             //call submitCommand() with an instance of CommandDoHalt
         } else if(commandSplit[0].charAt(0).equals("@")){ //MISCELLANEOUS COMMANDS
-            if(commandSplit[0].equals("@CLOCK")){
+            if(commandSplit[0].equalsIgnoreCase("@CLOCK")){
                 if(commandSplit.length == 2){
                     boolean isNumer;
                     try {
@@ -115,11 +115,11 @@ public class CommandParser{
                 } else {
                     System.out.println("Invalid @CLOCK input length");
                 }
-            } else if(commandSplit[0].equals("@RUN")){
+            } else if(commandSplit[0].equalsIgnoreCase("@RUN")){
                 //call submitCommand() with an instance of CommandDoRunCommandFile
-            } else if(commandSplit[0].equals("@EXIT")){
+            } else if(commandSplit[0].equalsIgnoreCase("@EXIT")){
                 //call submitCommand() with an instance of CommandDoExit
-            } else if(commandSplit[0].equals("@WAIT")){
+            } else if(commandSplit[0].equalsIgnoreCase("@WAIT")){
                 //call submitCommand() with an instance of commandDoWait
             } else {
                 System.out.println("Invalid @ command");
