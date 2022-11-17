@@ -28,21 +28,59 @@ public class CommandParser{
 
         if(commandSplit[0].equalsIgnoreCase("CREATE")){ //CREATIONAL COMMANDS
             if(commandSplit[1].equalsIgnoreCase("RUDDER")){
-                //call doCreateRudder()
+               	//CREATE RUDDER <id> WITH LIMIT <angle> SPEED <speed> ACCELERATION <acceleration>
+                String id = commandSplit[2];
+                double limit = Double.parseDouble(commandSplit[5]);
+                double speed = Double.parseDouble(commandSplit[7]);
+                double acceleration = Double.parseDouble(commandSplit[9]);
+                //createRudder(id, limit, speed, acceleration);
             } else if(commandSplit[1].equalsIgnoreCase("ELEVATOR")){
-                //call doCreateElevator()
+                //CREATE ELEVATOR <id> WITH LIMIT <angle> SPEED <speed> ACCELERATION <acceleration>
+                String id = commandSplit[2];
+                double limit = commandSplit[5];
+                double speed = commandSplit[7];
+                double acceleration = commandSplit[9];
+                //createElevator(id, limit, speed, acceleration);
             } else if(commandSplit[1].equalsIgnoreCase("AILERON")){
-                //createAileron(id, angle1, angle2, speed, acceleration);
+                //CREATE AILERON <id> WITH LIMIT UP <angle1> DOWN <angle2> SPEED <speed> ACCELERATION <acceleration> 
+                String id = commandSplit[2];
+                double limitUp = Double.parseDouble(commandSplit[6]);
+                double limitDown = Double.parseDouble(commandSplit[8]);
+                double speed = Double.parseDouble(commandSplit[10]);
+                double acceleration = Double.parseDouble(commandSplit[12]);
+                //createAileron(id, limitUp, limitDown, speed, acceleration);
             } else if(commandSplit[1].equalsIgnoreCase("SPLIT")){
-                //call doCreateFlap()
+                //CREATE SPLIT FLAP <id> WITH LIMIT <angle> SPEED <speed> ACCELERATION <acceleration>
+                String id = commandSplit[3];
+                double limit = commandSplit[6];
+                double speed = commandSplit[8];
+                double acceleration = commandSplit[10];
+                //createFlap(id, limit, speed, acceleration)
             } else if(commandSplit[1].equalsIgnoreCase("FOWLER")){
-                //call doCreateFlap()
+                //CREATE FOWLER FLAP <id> WITH LIMIT <angle> SPEED <speed> ACCELERATION <acceleration>
+                String id = commandSplit[3];
+                double limit = commandSplit[6];
+                double speed = commandSplit[8];
+                double acceleration = commandSplit[10];
+                //createFlap(id, limit, speed, acceleration);
             } else if(commandSplit[1].equalsIgnoreCase("ENGINE")){
-                //call doCreateEngine()
+                //CREATE ENGINE <id> WITH SPEED <speed> ACCELERATION <acceleration>
+                String id = commandSplit[2];
+                double limit = commandSplit[5];
+                double acceleration = commandSplit[7];
+                //createEngine(id, speed, acceleration);
             } else if(commandSplit[1].equalsIgnoreCase("NOSE")){
-                //call doCreateGearNose()
+                //CREATE NOSE GEAR <id> WITH SPEED <speed> ACCELERATION <acceleration>
+                String id = commandSplit[3];
+                double speed = commandSplit[6];
+                double acceleration = commandSplit[8];
+                //createGearNose(id, speed, acceleration);
             } else if(commandSplit[1].equalsIgnoreCase("MAIN")){
-                //call doCreateGearMain()
+                //CREATE MAIN GEAR <id> WITH SPEED <speed> ACCELERATION <acceleration> 
+                String id = commandSplit[3];
+                double speed = commandSplit[6];
+                double acceleration = commandSplit[8];
+                //createGearMain(id, speed, acceleration);
             } else {
                 throw new IOException("Invalid CREATE command input");
             }
