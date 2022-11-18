@@ -11,6 +11,7 @@ public class CommandParser{
 
     public ActionSet actionSet;
     public String command;
+    public ActionCreational actionCreational;
 
     // create your parser
     // the ActionSet and command string are provided to you automatically.
@@ -24,19 +25,19 @@ public class CommandParser{
     }
 
     // do the parsing
-    public void parse(){
+    public void parse() throws IOException{
         //split the input by semicolon so multiple commands can be entered with one input
-        String[] semiSplit = getText().split(";", 0);
+        String[] semiSplit = this.command.split(";", 0);
 
         //for each command, split the command by spaces and figure out what each command is trying to do
         for(int i = 0; i < semiSplit.length; i++){
             //" +" is RegEx that should make it so empty strings are not included in the string array
-            String[] commandSplit = getText().split(" +", 0);
+            String[] commandSplit = semiSplit[i].split(" +", 0);
             parseHelper(commandSplit);
         }
     }
 
-    public void parseHelper(String[] commandSplit){
+    public void parseHelper(String[] commandSplit) throws IOException{
         if(commandSplit[0].equalsIgnoreCase("CREATE")){ //CREATIONAL COMMANDS
             if(commandSplit[1].equalsIgnoreCase("RUDDER")){
                	//CREATE RUDDER <id> WITH LIMIT <angle> SPEED <speed> ACCELERATION <acceleration>
@@ -143,7 +144,7 @@ public class CommandParser{
 
         } else if(commandSplit[0].equalsIgnoreCase("HALT")){
             //call submitCommand() with an instance of CommandDoHalt
-        } else if(commandSplit[0].charAt(0).equals("@")){ //MISCELLANEOUS COMMANDS
+        } else if(commandSplit[0].charAt(0) == '@'){ //MISCELLANEOUS COMMANDS
             if(commandSplit[0].equalsIgnoreCase("@CLOCK")){
                 if(commandSplit.length == 2 || ((commandSplit.length > 2) && (commandSplit[2].startsWith("//")))){
                     boolean isNumber;
@@ -236,7 +237,7 @@ public class CommandParser{
     //         This calls doCreateElevator(), which creates and registers an instance of ActuatorElevator.
     public void createElevator(Identifier id, Angle angle, Speed speed, Acceleration acceleration){
 
-        actionCreational.doCreateelevator(id, angle, speed, acceleration);
+        actionCreational.doCreateElevator(id, angle, speed, acceleration);
 
     }
 
