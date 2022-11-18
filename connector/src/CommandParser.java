@@ -260,6 +260,23 @@ public class CommandParser{
 
     }
 
+    //Input: CREATE SPLIT FLAP <id> WITH LIMIT <angle> SPEED <speed> ACCELERATION <acceleration>
+    //Action: Creates an ActuatorFlapSplit with identifier id that deflects angle degrees down from center (0 degrees) at maximum
+    // 		  speed speed and acceleration acceleration.
+    // 		  This calls doCreateFlap(), which creates and registers an instance of ActuatorFlapSplit.
+    public void createSplitFlap(Identifier id, Angle angle1, Speed speed, Acceleration acceleration) {
+    	actionCreational.doCreateFlap(id, false, angle1, speed, acceleration);
+    }
+    
+    //Input:CREATE FOWLER FLAP <id> WITH LIMIT <angle> SPEED <speed> ACCELERATION <acceleration> 
+    //Action: Creates an ActuatorFlapFowler with identifier id that deflects angle degrees down from center (0 degrees) at
+    // 		  maximum speed speed and acceleration acceleration. Additional hardcoded definitions are specified in
+    //		  ActuatorFlapFowler.
+    // 		  This calls doCreateFlap(), which creates and registers an instance of ActuatorFlapFowler.
+    public void createFowlerFlap(Identifier id, Angle angle1, Speed speed, Acceleration acceleration) {
+    	actionCreational.doCreateAileron(id, true, angle1, speed, acceleration);
+    }
+
     // Input: DECLARE AILERON CONTROLLER <id1> WITH AILERONS <idn>+ PRIMARY <idx> (SLAVE <idslave> TO <idmaster> BY <percent> PERCENT)*
     // Action: creates a 'ControllerAileron' with identifier 'id1' containing n ailerons 'idn,' where n is even
     //         the first half of n in order are on the left wing, and the second half on the right
