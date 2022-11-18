@@ -1,3 +1,5 @@
+import java.io.IOException;
+
 import sbw.architecture.datatype.*;
 import sbw.project.cli.CommandLineInterface;
 import sbw.project.cli.action.ActionCreational;
@@ -24,7 +26,7 @@ public class CommandParser{
     // do the parsing
     public void parse(){
         //split the input by semicolon so multiple commands can be entered with one input
-        String[] semiSplit = getText().split(";");
+        String[] semiSplit = getText().split(";", 0);
 
         //for each command, split the command by spaces and figure out what each command is trying to do
         for(int i = 0; i < semiSplit.length; i++){
@@ -38,57 +40,57 @@ public class CommandParser{
         if(commandSplit[0].equalsIgnoreCase("CREATE")){ //CREATIONAL COMMANDS
             if(commandSplit[1].equalsIgnoreCase("RUDDER")){
                	//CREATE RUDDER <id> WITH LIMIT <angle> SPEED <speed> ACCELERATION <acceleration>
-                Identifier id = commandSplit[2];
-                Angle limit = Double.parseDouble(commandSplit[5]);
-                Speed speed = Double.parseDouble(commandSplit[7]);
-                Acceleration acceleration = Double.parseDouble(commandSplit[9]);
+                Identifier id = stringToIdentifier(commandSplit[2]);
+                Angle limit = doubleToAngle(Double.parseDouble(commandSplit[5]));
+                Speed speed = doubleToSpeed(Double.parseDouble(commandSplit[7]));
+                Acceleration acceleration = doubleToAcceleration(Double.parseDouble(commandSplit[9]));
                 //createRudder(id, limit, speed, acceleration);
             } else if(commandSplit[1].equalsIgnoreCase("ELEVATOR")){
                 //CREATE ELEVATOR <id> WITH LIMIT <angle> SPEED <speed> ACCELERATION <acceleration>
-                Identifier id = commandSplit[2];
-                Angle limit = commandSplit[5];
-                Speed speed = commandSplit[7];
-                Acceleration acceleration = commandSplit[9];
+                Identifier id = stringToIdentifier(commandSplit[2]);
+                Angle limit = doubleToAngle(Double.parseDouble(commandSplit[5]));
+                Speed speed = doubleToSpeed(Double.parseDouble(commandSplit[7]));
+                Acceleration acceleration = doubleToAcceleration(Double.parseDouble(commandSplit[9]));
                 //createElevator(id, limit, speed, acceleration);
             } else if(commandSplit[1].equalsIgnoreCase("AILERON")){
                 //CREATE AILERON <id> WITH LIMIT UP <angle1> DOWN <angle2> SPEED <speed> ACCELERATION <acceleration> 
-                Identifier id = commandSplit[2];
-                Angle limitUp = Double.parseDouble(commandSplit[6]);
-                Angle limitDown = Double.parseDouble(commandSplit[8]);
-                Speed speed = Double.parseDouble(commandSplit[10]);
-                Acceleration acceleration = Double.parseDouble(commandSplit[12]);
+                Identifier id = stringToIdentifier(commandSplit[2]);
+                Angle limitUp = doubleToAngle(Double.parseDouble(commandSplit[6]));
+                Angle limitDown = doubleToAngle(Double.parseDouble(commandSplit[8]));
+                Speed speed = doubleToSpeed(Double.parseDouble(commandSplit[10]));
+                Acceleration acceleration = doubleToAcceleration(Double.parseDouble(commandSplit[12]));
                 //createAileron(id, limitUp, limitDown, speed, acceleration);
             } else if(commandSplit[1].equalsIgnoreCase("SPLIT")){
                 //CREATE SPLIT FLAP <id> WITH LIMIT <angle> SPEED <speed> ACCELERATION <acceleration>
-                Identifier id = commandSplit[3];
-                Angle limit = commandSplit[6];
-                Speed speed = commandSplit[8];
-                Acceleration acceleration = commandSplit[10];
+                Identifier id = stringToIdentifier(commandSplit[3]);
+                Angle limit = doubleToAngle(Double.parseDouble(commandSplit[6]));
+                Speed speed = doubleToSpeed(Double.parseDouble(commandSplit[8]));
+                Acceleration acceleration = doubleToAcceleration(Double.parseDouble(commandSplit[10]));
                 //createFlap(id, limit, speed, acceleration)
             } else if(commandSplit[1].equalsIgnoreCase("FOWLER")){
                 //CREATE FOWLER FLAP <id> WITH LIMIT <angle> SPEED <speed> ACCELERATION <acceleration>
-                Identifier id = commandSplit[3];
-                Angle limit = commandSplit[6];
-                Speed speed = commandSplit[8];
-                Acceleration acceleration = commandSplit[10];
+                Identifier id = stringToIdentifier(commandSplit[3]);
+                Angle limit = doubleToAngle(Double.parseDouble(commandSplit[6]));
+                Speed speed = doubleToSpeed(Double.parseDouble(commandSplit[8]));
+                Acceleration acceleration = doubleToAcceleration(Double.parseDouble(commandSplit[10]));
                 //createFlap(id, limit, speed, acceleration);
             } else if(commandSplit[1].equalsIgnoreCase("ENGINE")){
                 //CREATE ENGINE <id> WITH SPEED <speed> ACCELERATION <acceleration>
-                Identifier id = commandSplit[2];
-                Speed speed = commandSplit[5];
-                Acceleration acceleration = commandSplit[7];
+                Identifier id = stringToIdentifier(commandSplit[2]);
+                Speed speed = doubleToSpeed(Double.parseDouble(commandSplit[5]));
+                Acceleration acceleration = doubleToAcceleration(Double.parseDouble(commandSplit[7]));
                 //createEngine(id, speed, acceleration);
             } else if(commandSplit[1].equalsIgnoreCase("NOSE")){
                 //CREATE NOSE GEAR <id> WITH SPEED <speed> ACCELERATION <acceleration>
-                Identifier id = commandSplit[3];
-                Speed speed = commandSplit[6];
-                Acceleration acceleration = commandSplit[8];
+                Identifier id = stringToIdentifier(commandSplit[3]);
+                Speed speed = doubleToSpeed(Double.parseDouble(commandSplit[6]));
+                Acceleration acceleration = doubleToAcceleration(Double.parseDouble(commandSplit[8]));
                 //createGearNose(id, speed, acceleration);
             } else if(commandSplit[1].equalsIgnoreCase("MAIN")){
                 //CREATE MAIN GEAR <id> WITH SPEED <speed> ACCELERATION <acceleration> 
-                Identifier id = commandSplit[3];
-                Speed speed = commandSplit[6];
-                Acceleration acceleration = commandSplit[8];
+                Identifier id = stringToIdentifier(commandSplit[3]);
+                Speed speed = doubleToSpeed(Double.parseDouble(commandSplit[6]));
+                Acceleration acceleration = doubleToAcceleration(Double.parseDouble(commandSplit[8]));
                 //createGearMain(id, speed, acceleration);
             } else {
                 throw new IOException("Invalid CREATE command input");
@@ -126,7 +128,7 @@ public class CommandParser{
             } else if(commandSplit[3].equalsIgnoreCase("FLAP")){
                 //call submitCommand() with an instance of CommandDoSetFlaps
             } else if(commandSplit[3].equalsIgnoreCase("POWER")){
-                if(commandSplit.length == 5 || ((commandSplit.length > 5) && (commandSplit[5].startWith("//")))){
+                if(commandSplit.length == 5 || ((commandSplit.length > 5) && (commandSplit[5].startsWith("//")))){
                     //call submitCommand() with an instance of CommandDoSetEnginePowerAll
                 } else if(commandSplit.length >= 7){
                     //call submitCommand() with an instance of CommandDoSetEnginePowerSingle
@@ -143,8 +145,8 @@ public class CommandParser{
             //call submitCommand() with an instance of CommandDoHalt
         } else if(commandSplit[0].charAt(0).equals("@")){ //MISCELLANEOUS COMMANDS
             if(commandSplit[0].equalsIgnoreCase("@CLOCK")){
-                if(commandSplit.length == 2 || ((commandSplit.length > 2) && (commandSplit[2].startWith("//")))){
-                    boolean isNumer;
+                if(commandSplit.length == 2 || ((commandSplit.length > 2) && (commandSplit[2].startsWith("//")))){
+                    boolean isNumber;
                     try {
                         double d = Double.parseDouble(commandSplit[1]);
                     } catch (NumberFormatException nfe){
@@ -157,7 +159,7 @@ public class CommandParser{
                         //I may need to split this up even more to account for pause|resume|update
                         //call submitCommand() with an instance of CommandDoSetClockRunning or CommandDoClockUpdate
                     }
-                } else if(commandSplit.length == 1 || ((commandSplit.length > 1) && (commandSplit[1].startWith("//")))){
+                } else if(commandSplit.length == 1 || ((commandSplit.length > 1) && (commandSplit[1].startsWith("//")))){
                     //call submitCommand() with an instance of CommandDoShowClock
                 } else {
                     throw new IOException("Invalid @CLOCK input length");
@@ -175,6 +177,49 @@ public class CommandParser{
         } else {
             throw new IOException("Invalid command input");
         }
+    }
+
+    public Acceleration doubleToAcceleration(double acceleration){
+        Acceleration newAcceleration = new Acceleration(acceleration);
+        return newAcceleration;
+    }
+
+    public Angle doubleToAngle(double angle){
+        Angle newAngle = new Angle(angle);
+        return newAngle;
+    }
+    
+    public Identifier stringToIdentifier(String id){
+        Identifier newId = new Identifier(id);
+        return newId;
+    }
+
+    public Percent doubleToPercent(double percent){
+        Percent newPercent = new Percent(percent);
+        return newPercent;
+    }
+
+    //figure out how to use getEnum
+    /*
+    public Position intToPosition(int position){
+        Position newPosition = new Position(getEnum(position));
+        return newPosition;
+    }
+    */
+
+    public Power doubleToPower(double power){
+        Power newPower = new Power(power);
+        return newPower;
+    }
+
+    public Rate intToRate(int rate){
+        Rate newRate = new Rate(rate);
+        return newRate;
+    }
+
+    public Speed doubleToSpeed(double speed){
+        Speed newSpeed = new Speed(speed);
+        return newSpeed;
     }
 
     // Input: CREATE RUDDER <id> WITH LIMIT <angle> SPEED <speed> ACCELERATION <acceleration>
