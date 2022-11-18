@@ -3,6 +3,7 @@ import java.io.IOException;
 import sbw.architecture.datatype.*;
 import sbw.project.cli.CommandLineInterface;
 import sbw.project.cli.action.ActionCreational;
+import sbw.project.cli.action.ActionStructural;
 import sbw.project.cli.action.ActionSet;
 import sbw.project.cli.action.ActionMiscellaneous;
 import sbw.project.cli.action.command.misc.CommandDoExit;
@@ -12,15 +13,17 @@ public class CommandParser{
     public ActionSet actionSet;
     public String command;
     public ActionCreational actionCreational;
-
+    public ActionStructural actionStructural;
+    
     // create your parser
     // the ActionSet and command string are provided to you automatically.
     // do not do the parsing here
     public CommandParser(ActionSet actionSet, String command){
 
         this.actionSet = actionSet;
-        this.actionCreational = actionSet.getActionCreational();
         this.command = command;
+        this.actionCreational = actionSet.getActionCreational();
+        this.actionStructural = actionSet.getActionStructural();
 
     }
 
@@ -259,7 +262,7 @@ public class CommandParser{
         actionCreational.doCreateEngine(id, speed, acceleration);
 
     }
-
+    
     //Input: CREATE SPLIT FLAP <id> WITH LIMIT <angle> SPEED <speed> ACCELERATION <acceleration>
     //Action: Creates an ActuatorFlapSplit with identifier id that deflects angle degrees down from center (0 degrees) at maximum
     // 		  speed speed and acceleration acceleration.
@@ -276,7 +279,7 @@ public class CommandParser{
     public void createFowlerFlap(Identifier id, Angle angle1, Speed speed, Acceleration acceleration) {
     	actionCreational.doCreateAileron(id, true, angle1, speed, acceleration);
     }
-
+    
     // Input: DECLARE AILERON CONTROLLER <id1> WITH AILERONS <idn>+ PRIMARY <idx> (SLAVE <idslave> TO <idmaster> BY <percent> PERCENT)*
     // Action: creates a 'ControllerAileron' with identifier 'id1' containing n ailerons 'idn,' where n is even
     //         the first half of n in order are on the left wing, and the second half on the right
@@ -293,6 +296,16 @@ public class CommandParser{
 
     }
 
+    //Input: DECLARE FLAP CONTROLLER <id> WITH FLAPS <idn>+
+    //Action: Creates a ControllerFlap with identifier id containing flaps idn, where n must be even and the flap types must have
+    //		  symmetrically identical configurations.
+    //		  This calls doDeclareFlapController(), which creates and registers an instance of ControllerFlap.
+    public void declareFlapController(Identifier id1, Identifier idn) {
+    	actionStructural.doDeclareFlapController(idn, id1);
+    }
+    
+    
+    
     // Input: DECLARE ENGINE CONTROLLER <id1> WITH ENGINE[S] <idn>+
     // Action: creates a 'ControllerEngine' with identifier 'id1' containing engines 'idn,' arrayed left to right in order, with identical configurations
     //         the plural form of ENGINE need not correspond grammatically to n
@@ -301,6 +314,14 @@ public class CommandParser{
 
 
 
+    }
+    
+    //Input:DECLARE GEAR CONTROLLER <id1> WITH GEAR NOSE <id2> MAIN <id3> <id4>
+    //Action: Creates a ControllerGear with identifier id1 containing nose gear id2 and main gear id3 (left) and id4 (right). Both
+    //		  main gear must be identical in configuration.
+    //		  This calls doDeclareGearController(), which creates and registers an instance of ControllerGear.
+    public void declareGearController (Identifier id1, Identifier id2, Identifier id3, Identifier id4) {
+    	actionStructural.doDeclareGearController(id1, id2, id3, id4);
     }
 
     // Input: DO <id> DEFLECT AILERONS <angle> UP|DOWN
