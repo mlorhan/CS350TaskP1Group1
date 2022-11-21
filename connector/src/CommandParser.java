@@ -102,25 +102,56 @@ public class CommandParser{
 
         } else if(commandSplit[0].equalsIgnoreCase("DECLARE")){ //STRUCTURAL COMMANDS
             if(commandSplit[1].equalsIgnoreCase("RUDDER")){
-                //call doDeclareRudderController()
+                //DECLARE RUDDER CONTROLLER <id1> WITH RUDDER <id2>
+                Identifier idController = stringToIdentifier(commandSplit[3]);
+                Identifier idRudder = stringToIdentifier(commandSplit[6]);
+                //declareRudderController(id1, id2);
             } else if(commandSplit[1].equalsIgnoreCase("ELEVATOR")){
-                //call doDeclareElevatorController()
+                //DECLARE ELEVATOR CONTROLLER <id1> WITH ELEVATORS <id2> <id3>
+                Identifier idController = stringToIdentifier(commandSplit[3]);
+                Identifier idElevatorLeft = stringToIdentifier(commandSplit[6]);
+                Identifier idElevatorRight = stringToIdentifier(commandSplit[7]);
+                //declareElevatorController(idController, idElevatorLeft, idElevatorRight);
             } else if(commandSplit[1].equalsIgnoreCase("AILERON")){
+                //DECLARE AILERON CONTROLLER <id1> WITH AILERONS <idn>+ PRIMARY <idx> (SLAVE <idslave> TO <idmaster> BY <percent> PERCENT)*
                 //call doDeclareAileronController()
             } else if(commandSplit[1].equalsIgnoreCase("FLAP")){
-                //call doDeclareFlapController()
+                //DECLARE FLAP CONTROLLER <id> WITH FLAPS <idn>+
+                Identifier idController = stringToIndentifier(commandSplit[3]);
+                List<Identifier> idFlaps = new List<Identifier>;
+                for(int i = 6; i < commandSplit.length && !commandSplit[i].startsWith("//"); i++){
+                    idFlaps.add(commandSplit[i]);
+                }
+                //declareFlapController(idController, idFlaps);
             } else if(commandSplit[1].equalsIgnoreCase("ENGINE")){
-                //call doDeclareEngineController()
+                //DECLARE ENGINE CONTROLLER <id1> WITH ENGINE[S] <idn>+
+                Identifier idController = stringToIndentifier(commandSplit[3]);
+                List<Identifier> idEngines = new List<Identifier>;
+                for(int i = 6; i < commandSplit.length && !commandSplit[i].startsWith("//"); i++){
+                    idEngines.add(commandSplit[i]);
+                }
+                //call doDeclareEngineController(idController, idEngines)
             } else if(commandSplit[1].equalsIgnoreCase("GEAR")){
-                //call doDeclareGearController()
+                //DECLARE GEAR CONTROLLER <id1> WITH GEAR NOSE <id2> MAIN <id3> <id4>
+                Identifier idController = stringToIdentifier(commandSplit[3]);
+                Identifier idNose = stringToIdentifier(commandSplit[7]);
+                Identifier idMainleft = stringToIdentifier(commandSplit[9]);
+                Identifier idMainRight = stringToIdentifier(commandSplit[10]);
+                //call doDeclareGearController(idController, idNose, idMainLeft, idMainRight);
             } else if(commandSplit[1].equalsIgnoreCase("BUS")){
-                //call doDeclareBus()
+                //DECLARE BUS <id1> WITH CONTROLLER[S] <idn>+
+                Identifier idBus = stringToIndentifier(commandSplit[2]);
+                List<Identifier> idControllers = new List<Identifier>;
+                for(int i = 5; i < commandSplit.length && !commandSplit[i].startsWith("//"); i++){
+                    idControllers.add(commandSplit[i]);
+                }
+                //call declareBus(idBus, idControllers)
             } else {
                 throw new IOException("Invalid DECLARE command input");
             }
-        } else if(commandSplit[0].equalsIgnoreCase("COMMIT")){ //BEHAVIORAL COMMANDS
+        } else if(commandSplit[0].equalsIgnoreCase("COMMIT")){
             //call doCommit()
-        } else if(commandSplit[0].equalsIgnoreCase("DO")){
+        } else if(commandSplit[0].equalsIgnoreCase("DO")){ //BEHAVIORAL COMMANDS
             if(commandSplit[3].equalsIgnoreCase("RUDDER")){
                 //call submitCommand() with an instance of CommandDoDeflectRudder
             } else if(commandSplit[3].equalsIgnoreCase("ELEVATOR")){
@@ -203,7 +234,6 @@ public class CommandParser{
         return newPercent;
     }
 
-    //figure out how to use getEnum
     /*
     public Position intToPosition(int position){
         Position newPosition = new Position(getEnum(position));
