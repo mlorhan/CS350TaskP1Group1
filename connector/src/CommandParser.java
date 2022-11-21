@@ -1,4 +1,6 @@
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import sbw.architecture.datatype.*;
 import sbw.project.cli.CommandLineInterface;
@@ -117,18 +119,18 @@ public class CommandParser{
                 //call doDeclareAileronController()
             } else if(commandSplit[1].equalsIgnoreCase("FLAP")){
                 //DECLARE FLAP CONTROLLER <id> WITH FLAPS <idn>+
-                Identifier idController = stringToIndentifier(commandSplit[3]);
-                List<Identifier> idFlaps = new List<Identifier>;
+                Identifier idController = stringToIdentifier(commandSplit[3]);
+                List<Identifier> idFlaps = new ArrayList<Identifier>();
                 for(int i = 6; i < commandSplit.length && !commandSplit[i].startsWith("//"); i++){
-                    idFlaps.add(commandSplit[i]);
+                    idFlaps.add(stringToIdentifier(commandSplit[i]));
                 }
                 //declareFlapController(idController, idFlaps);
             } else if(commandSplit[1].equalsIgnoreCase("ENGINE")){
                 //DECLARE ENGINE CONTROLLER <id1> WITH ENGINE[S] <idn>+
-                Identifier idController = stringToIndentifier(commandSplit[3]);
-                List<Identifier> idEngines = new List<Identifier>;
+                Identifier idController = stringToIdentifier(commandSplit[3]);
+                List<Identifier> idEngines = new ArrayList<Identifier>;
                 for(int i = 6; i < commandSplit.length && !commandSplit[i].startsWith("//"); i++){
-                    idEngines.add(commandSplit[i]);
+                    idEngines.add(stringToIdentifier(commandSplit[i]));
                 }
                 //call doDeclareEngineController(idController, idEngines)
             } else if(commandSplit[1].equalsIgnoreCase("GEAR")){
@@ -140,10 +142,10 @@ public class CommandParser{
                 //call doDeclareGearController(idController, idNose, idMainLeft, idMainRight);
             } else if(commandSplit[1].equalsIgnoreCase("BUS")){
                 //DECLARE BUS <id1> WITH CONTROLLER[S] <idn>+
-                Identifier idBus = stringToIndentifier(commandSplit[2]);
-                List<Identifier> idControllers = new List<Identifier>;
+                Identifier idBus = stringToIdentifier(commandSplit[2]);
+                List<Identifier> idControllers = new ArrayList<Identifier>();
                 for(int i = 5; i < commandSplit.length && !commandSplit[i].startsWith("//"); i++){
-                    idControllers.add(commandSplit[i]);
+                    idControllers.add(stringToIdentifier(commandSplit[i]));
                 }
                 //call declareBus(idBus, idControllers)
             } else {
@@ -307,7 +309,7 @@ public class CommandParser{
     //		  ActuatorFlapFowler.
     // 		  This calls doCreateFlap(), which creates and registers an instance of ActuatorFlapFowler.
     public void createFowlerFlap(Identifier id, Angle angle1, Speed speed, Acceleration acceleration) {
-    	actionCreational.doCreateAileron(id, true, angle1, speed, acceleration);
+    	actionCreational.doCreateFlap(id, true, angle1, speed, acceleration);
     }
     
     // Input: DECLARE AILERON CONTROLLER <id1> WITH AILERONS <idn>+ PRIMARY <idx> (SLAVE <idslave> TO <idmaster> BY <percent> PERCENT)*
@@ -330,8 +332,8 @@ public class CommandParser{
     //Action: Creates a ControllerFlap with identifier id containing flaps idn, where n must be even and the flap types must have
     //		  symmetrically identical configurations.
     //		  This calls doDeclareFlapController(), which creates and registers an instance of ControllerFlap.
-    public void declareFlapController(Identifier id1, Identifier idn) {
-    	actionStructural.doDeclareFlapController(idn, id1);
+    public void declareFlapController(Identifier id1, List<Identifier> idn) {
+    	actionStructural.doDeclareFlapController(id1, idn);
     }
     
     
@@ -340,7 +342,7 @@ public class CommandParser{
     // Action: creates a 'ControllerEngine' with identifier 'id1' containing engines 'idn,' arrayed left to right in order, with identical configurations
     //         the plural form of ENGINE need not correspond grammatically to n
     //         this calls doDeclareEngineController(), which creates and registers an instance of 'ControllerEngine'
-    public void declareEngineController(Identifier id1, Identifier idn){
+    public void declareEngineController(Identifier id1, List<Identifier> idn){
 
 
 
