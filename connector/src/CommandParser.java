@@ -116,6 +116,26 @@ public class CommandParser{
                 //declareElevatorController(idController, idElevatorLeft, idElevatorRight);
             } else if(commandSplit[1].equalsIgnoreCase("AILERON")){
                 //DECLARE AILERON CONTROLLER <id1> WITH AILERONS <idn>+ PRIMARY <idx> (SLAVE <idslave> TO <idmaster> BY <percent> PERCENT)*
+                Identifier idController = stringToIdentifier(commandSplit[3]);
+                List<Identifier> idAilerons = new ArrayList<Identifier>();
+                int i;
+                for(i = 6; i < commandSplit.length && !commandSplit[i].equalsIgnoreCase("PRIMARY"); i++){
+                    idAilerons.add(stringToIdentifier(commandSplit[i]));
+                }
+                i += 2;
+                Identifier idAileronPrimary = stringToIdentifier(commandSplit[i]);
+                i++;
+                List<AileronSlaveMix> slaveMixes = new ArrayList<AileronSlaveMix>();
+                // probably going to split the commands more to get rid of comments so I don't have to deal with them anymore
+                /* 
+                if(commandSplit.length >= i) {
+                    if(!commandSplit[i].startsWith("//")){
+                        for(i; i < commandSplit.length && !commandSplit[i].startsWith("//"); i++){
+                            slaveMixes.add(stringsToMix(commandSplit[i]));
+                        }
+                    }
+                }
+                */
                 //declareAileronController(idController, idAilerons, idAileronPrimary, slaveMixes);
             } else if(commandSplit[1].equalsIgnoreCase("FLAP")){
                 //DECLARE FLAP CONTROLLER <id> WITH FLAPS <idn>+
