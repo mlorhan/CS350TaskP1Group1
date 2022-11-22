@@ -323,21 +323,25 @@ public class CommandParser{
 
     }
     
-    //Input: CREATE SPLIT FLAP <id> WITH LIMIT <angle> SPEED <speed> ACCELERATION <acceleration>
-    //Action: Creates an ActuatorFlapSplit with identifier id that deflects angle degrees down from center (0 degrees) at maximum
+    //	Input: CREATE SPLIT FLAP <id> WITH LIMIT <angle> SPEED <speed> ACCELERATION <acceleration>
+    //	Action: Creates an ActuatorFlapSplit with identifier id that deflects angle degrees down from center (0 degrees) at maximum
     // 		  speed speed and acceleration acceleration.
     // 		  This calls doCreateFlap(), which creates and registers an instance of ActuatorFlapSplit.
     public void createSplitFlap(Identifier id, Angle angle1, Speed speed, Acceleration acceleration) {
+    		
     	actionCreational.doCreateFlap(id, false, angle1, speed, acceleration);
+    
     }
     
-    //Input:CREATE FOWLER FLAP <id> WITH LIMIT <angle> SPEED <speed> ACCELERATION <acceleration> 
-    //Action: Creates an ActuatorFlapFowler with identifier id that deflects angle degrees down from center (0 degrees) at
+    //	Input:CREATE FOWLER FLAP <id> WITH LIMIT <angle> SPEED <speed> ACCELERATION <acceleration> 
+    //	Action: Creates an ActuatorFlapFowler with identifier id that deflects angle degrees down from center (0 degrees) at
     // 		  maximum speed speed and acceleration acceleration. Additional hardcoded definitions are specified in
     //		  ActuatorFlapFowler.
     // 		  This calls doCreateFlap(), which creates and registers an instance of ActuatorFlapFowler.
     public void createFowlerFlap(Identifier id, Angle angle1, Speed speed, Acceleration acceleration) {
+    	
     	actionCreational.doCreateFlap(id, true, angle1, speed, acceleration);
+    
     }
     
     // Input: DECLARE AILERON CONTROLLER <id1> WITH AILERONS <idn>+ PRIMARY <idx> (SLAVE <idslave> TO <idmaster> BY <percent> PERCENT)*
@@ -356,12 +360,14 @@ public class CommandParser{
 
     }
 
-    //Input: DECLARE FLAP CONTROLLER <id> WITH FLAPS <idn>+
-    //Action: Creates a ControllerFlap with identifier id containing flaps idn, where n must be even and the flap types must have
+    //	Input: DECLARE FLAP CONTROLLER <id> WITH FLAPS <idn>+
+    //	Action: Creates a ControllerFlap with identifier id containing flaps idn, where n must be even and the flap types must have
     //		  symmetrically identical configurations.
     //		  This calls doDeclareFlapController(), which creates and registers an instance of ControllerFlap.
     public void declareFlapController(Identifier id1, List<Identifier> idn) {
+    	
     	actionStructural.doDeclareFlapController(id1, idn);
+    
     }
     
     
@@ -376,14 +382,16 @@ public class CommandParser{
 
     }
     
-    //Input:DECLARE GEAR CONTROLLER <id1> WITH GEAR NOSE <id2> MAIN <id3> <id4>
-    //Action: Creates a ControllerGear with identifier id1 containing nose gear id2 and main gear id3 (left) and id4 (right). Both
+    //	Input: DECLARE GEAR CONTROLLER <id1> WITH GEAR NOSE <id2> MAIN <id3> <id4>
+    //	Action: Creates a ControllerGear with identifier id1 containing nose gear id2 and main gear id3 (left) and id4 (right). Both
     //		  main gear must be identical in configuration.
     //		  This calls doDeclareGearController(), which creates and registers an instance of ControllerGear.
     public void declareGearController (Identifier id1, Identifier id2, Identifier id3, Identifier id4) {
+    	
     	actionStructural.doDeclareGearController(id1, id2, id3, id4);
+    
     }
-
+    
     // Input: DO <id> DEFLECT AILERONS <angle> UP|DOWN
     // Action: requests that aileron controller 'id' deflect its primary aileron respectively up or down to angle 'angle'
     //         the opposite ailerons will deflect in the other direction
@@ -395,6 +403,24 @@ public class CommandParser{
 
     }
 
+  //	Input: DO <id> DEFLECT FLAP <position>
+  //	Action: Requests that flap controller id deflect its flaps to position position, which is correspondingly 0, 25, 50, 75, or 100% of 
+  //		    the deflection range. 
+  //		    This calls submitCommand() with an instance of CommandDoSetFlaps. 
+    public void deflectFlap(Identifier id, Position position) { 
+    	
+    	CommandLineInterface cli = new CommandLineInterface(); 
+    	
+    	ActionSet actions = new ActionSet(cli); 
+    	
+    	ActionMiscellaneous action = actions.getActionMiscellaneous(); 
+    	
+    	CommandDoSetFlaps flapsCommand = new CommandDoSetFlaps(id, position); 
+    	
+    	action.submitCommand(flapsCommand); 
+    	
+    }
+    
     // Input: DO <id> SET POWER <power>
     // Action: requests that engine controller 'id' set the power of all engines to power 'power'
     //         this calls submitCommand() with an instance of 'CommandDoSetEnginePowerAll'
@@ -403,7 +429,24 @@ public class CommandParser{
 
 
     }
-
+    
+    // Input: DO <id> GEAR UP|DOWN 
+    // Action: Requests that gear controller id respectively raise or lower its gear.
+    //         This calls submitCommand() with an instance of CommandDoSelectGear
+    public void gearPosition (Identifier id, boolean isDown) {
+    	
+    	CommandLineInterface cli = new CommandLineInterface(); 
+    	
+    	ActionSet actions = new ActionSet(cli); 
+    	
+    	ActionMiscellaneous action = actions.getActionMiscellaneous(); 
+    	
+    	CommandDoSelectGear gearCommand = new CommandDoSelectGear(id, isDown); 
+    	
+    	action.submitCommand(gearCommand);
+    	
+    }
+    
     // Input: @EXIT
     // Action: exits the system
     //         this calls submitCommand() with an instance of 'CommandDoExit'
