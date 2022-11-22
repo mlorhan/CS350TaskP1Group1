@@ -116,7 +116,7 @@ public class CommandParser{
                 //declareElevatorController(idController, idElevatorLeft, idElevatorRight);
             } else if(commandSplit[1].equalsIgnoreCase("AILERON")){
                 //DECLARE AILERON CONTROLLER <id1> WITH AILERONS <idn>+ PRIMARY <idx> (SLAVE <idslave> TO <idmaster> BY <percent> PERCENT)*
-                //call doDeclareAileronController()
+                //declareAileronController(idController, idAilerons, idAileronPrimary, slaveMixes);
             } else if(commandSplit[1].equalsIgnoreCase("FLAP")){
                 //DECLARE FLAP CONTROLLER <id> WITH FLAPS <idn>+
                 Identifier idController = stringToIdentifier(commandSplit[3]);
@@ -128,7 +128,7 @@ public class CommandParser{
             } else if(commandSplit[1].equalsIgnoreCase("ENGINE")){
                 //DECLARE ENGINE CONTROLLER <id1> WITH ENGINE[S] <idn>+
                 Identifier idController = stringToIdentifier(commandSplit[3]);
-                List<Identifier> idEngines = new ArrayList<Identifier>;
+                List<Identifier> idEngines = new ArrayList<Identifier>();
                 for(int i = 6; i < commandSplit.length && !commandSplit[i].startsWith("//"); i++){
                     idEngines.add(stringToIdentifier(commandSplit[i]));
                 }
@@ -256,6 +256,14 @@ public class CommandParser{
     public Speed doubleToSpeed(double speed){
         Speed newSpeed = new Speed(speed);
         return newSpeed;
+    }
+
+    public AileronSlaveMix stringsToMix(String idMaster, String idSlave, double mix){
+        Identifier newIdMaster = stringToIdentifier(idMaster);
+        Identifier newIdSlave = stringToIdentifier(idSlave);
+        Percent newMix = doubleToPercent(mix);
+        AileronSlaveMix newSlaveMix = new AileronSlaveMix(newIdMaster, newIdSlave, newMix);
+        return newSlaveMix;
     }
 
     // Input: CREATE RUDDER <id> WITH LIMIT <angle> SPEED <speed> ACCELERATION <acceleration>
