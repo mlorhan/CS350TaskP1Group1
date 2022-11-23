@@ -107,7 +107,7 @@ public class CommandParser{
                 //DECLARE RUDDER CONTROLLER <id1> WITH RUDDER <id2>
                 Identifier idController = stringToIdentifier(commandSplit[3]);
                 Identifier idRudder = stringToIdentifier(commandSplit[6]);
-                //declareRudderController(id1, id2);
+                //declareRudderController(idController, idRudder);
             } else if(commandSplit[1].equalsIgnoreCase("ELEVATOR")){
                 //DECLARE ELEVATOR CONTROLLER <id1> WITH ELEVATORS <id2> <id3>
                 Identifier idController = stringToIdentifier(commandSplit[3]);
@@ -344,6 +344,21 @@ public class CommandParser{
     
     }
     
+    // Input: DECLARE RUDDER CONTROLLER <id1> WITH RUDDER <id2>
+    // Action: Creates a ControllerRudder with identifier id1 containing rudder id2.
+    //     This calls doDeclareRudderController(), which creates and registers an instance of ControllerRudder
+    public void declareRudderController(Identifier idController, Identifier idRudder){
+        actionStructural.doDeclareRudderController(idController, idRudder);
+    }
+
+    // Input: DECLARE ELEVATOR CONTROLLER <id1> WITH ELEVATORS <id2> <id3>
+    // Action: Creates a ControllerElevator with identifier id1 containing elevators id2 (left) and id3 (right), which must be identical in configuration.
+    //     This calls doDeclareElevatorController(), which creates and registers an instance of ControllerElevator.
+    public void declareElevatorController(Identifier idController, Identifier idElevatorLeft, Identifier idElevatorRight){
+        actionStructural.doDeclareElevatorController(idController, idElevatorLeft, idElevatorRight);
+    }
+
+
     // Input: DECLARE AILERON CONTROLLER <id1> WITH AILERONS <idn>+ PRIMARY <idx> (SLAVE <idslave> TO <idmaster> BY <percent> PERCENT)*
     // Action: creates a 'ControllerAileron' with identifier 'id1' containing n ailerons 'idn,' where n is even
     //         the first half of n in order are on the left wing, and the second half on the right
