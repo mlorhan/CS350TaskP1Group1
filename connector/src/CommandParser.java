@@ -256,12 +256,11 @@ public class CommandParser{
         return newPercent;
     }
 
-    /*
     public Position intToPosition(int position){
-        Position newPosition = new Position(getEnum(position));
+    	Position.E_Position positionEnum = Position.getEnum(position);
+        Position newPosition = new Position(positionEnum);
         return newPosition;
     }
-    */
 
     public Power doubleToPower(double power){
         Power newPower = new Power(power);
