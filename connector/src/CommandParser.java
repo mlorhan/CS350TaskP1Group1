@@ -6,8 +6,10 @@ import sbw.architecture.datatype.*;
 import sbw.project.cli.CommandLineInterface;
 import sbw.project.cli.action.ActionCreational;
 import sbw.project.cli.action.ActionStructural;
+import sbw.project.cli.action.ActionBehavioral;
 import sbw.project.cli.action.ActionSet;
 import sbw.project.cli.action.ActionMiscellaneous;
+import sbw.project.cli.action.command.behavioral.CommandDoSelectGear;
 import sbw.project.cli.action.command.misc.CommandDoExit;
 
 public class CommandParser{
@@ -454,7 +456,7 @@ public class CommandParser{
     	
     	ActionSet actions = new ActionSet(cli); 
     	
-    	ActionMiscellaneous action = actions.getActionMiscellaneous(); 
+    	ActionBehavioral action = actions.getActionBehavioral(); 
     	
     	CommandDoSelectGear gearCommand = new CommandDoSelectGear(id, isDown); 
     	
