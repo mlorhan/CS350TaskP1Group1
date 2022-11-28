@@ -13,6 +13,7 @@ import sbw.project.cli.action.command.behavioral.CommandDoDeflectRudder;
 import sbw.project.cli.action.command.behavioral.CommandDoSelectGear;
 import sbw.project.cli.action.command.behavioral.CommandDoSetFlaps;
 import sbw.project.cli.action.command.misc.CommandDoExit;
+import sbw.project.cli.action.command.misc.CommandDoWait;
 
 public class CommandParser{
 
@@ -485,6 +486,19 @@ public class CommandParser{
     	CommandDoSelectGear gearCommand = new CommandDoSelectGear(id, isDown); 
     	
     	action.submitCommand(gearCommand);	
+    }
+    
+    /*****MISCELLANEOUS COMMANDS*****/
+    
+    // Input: @WAIT <rate>
+    // Action: Waits rate milliseconds before executing the next behavioral command. This command is not valid until after @commit.
+    //      This calls submitCommand() with an instance of CommandDoWait.
+    public void wait(Rate rate){
+    	CommandLineInterface cli = new CommandLineInterface();
+    	ActionSet actionSet = new ActionSet(cli);
+    	ActionMiscellaneous action = actionSet.getActionMiscellaneous();
+    	CommandDoWait waitCommand = new CommandDoWait(rate);
+    	action.submitCommand(waitCommand);
     }
     
     // Input: @EXIT
