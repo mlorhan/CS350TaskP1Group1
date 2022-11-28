@@ -123,22 +123,20 @@ public class CommandParser{
                 Identifier idController = stringToIdentifier(commandSplit[3]);
                 List<Identifier> idAilerons = new ArrayList<Identifier>();
                 int i;
-                for(i = 6; i < commandSplit.length && !commandSplit[i].equalsIgnoreCase("PRIMARY"); i++){
+                for(i = 6; !commandSplit[i].equalsIgnoreCase("PRIMARY"); i++){
                     idAilerons.add(stringToIdentifier(commandSplit[i]));
                 }
                 i += 2;
                 Identifier idAileronPrimary = stringToIdentifier(commandSplit[i]);
-                i++;
+                i += 2;
                 List<AileronSlaveMix> slaveMixes = new ArrayList<AileronSlaveMix>();
-                /*
-                if(commandSplit.length >= i) {
-                    if(!commandSplit[i].startsWith("//")){
-                        for(i; i < commandSplit.length && !commandSplit[i].startsWith("//"); i++){
-                            slaveMixes.add(stringsToMix(commandSplit[i]));
-                        }
+                
+                for(; i < commandSplit.length; i += 7){
+                    if(commandSplit.length > i) { //there is a slavemix section
+                        AileronSlaveMix newSlaveMix = stringsToMix(commandSplit[i+2], commandSplit[i], Double.parseDouble(commandSplit[i+4]));
+                        slaveMixes.add(newSlaveMix);
                     }
                 }
-                */
                 //declareAileronController(idController, idAilerons, idAileronPrimary, slaveMixes);
             } else if(commandSplit[1].equalsIgnoreCase("FLAP")){
                 //DECLARE FLAP CONTROLLER <id> WITH FLAPS <idn>+
