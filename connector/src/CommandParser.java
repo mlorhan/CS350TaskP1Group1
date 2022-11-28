@@ -59,14 +59,14 @@ public class CommandParser{
                 Angle limit = doubleToAngle(Double.parseDouble(commandSplit[5]));
                 Speed speed = doubleToSpeed(Double.parseDouble(commandSplit[7]));
                 Acceleration acceleration = doubleToAcceleration(Double.parseDouble(commandSplit[9]));
-                //createRudder(id, limit, speed, acceleration);
+                createRudder(id, limit, speed, acceleration);
             } else if(commandSplit[1].equalsIgnoreCase("ELEVATOR")){
                 //CREATE ELEVATOR <id> WITH LIMIT <angle> SPEED <speed> ACCELERATION <acceleration>
                 Identifier id = stringToIdentifier(commandSplit[2]);
                 Angle limit = doubleToAngle(Double.parseDouble(commandSplit[5]));
                 Speed speed = doubleToSpeed(Double.parseDouble(commandSplit[7]));
                 Acceleration acceleration = doubleToAcceleration(Double.parseDouble(commandSplit[9]));
-                //createElevator(id, limit, speed, acceleration);
+                createElevator(id, limit, speed, acceleration);
             } else if(commandSplit[1].equalsIgnoreCase("AILERON")){
                 //CREATE AILERON <id> WITH LIMIT UP <angle1> DOWN <angle2> SPEED <speed> ACCELERATION <acceleration> 
                 Identifier id = stringToIdentifier(commandSplit[2]);
@@ -74,27 +74,27 @@ public class CommandParser{
                 Angle limitDown = doubleToAngle(Double.parseDouble(commandSplit[8]));
                 Speed speed = doubleToSpeed(Double.parseDouble(commandSplit[10]));
                 Acceleration acceleration = doubleToAcceleration(Double.parseDouble(commandSplit[12]));
-                //createAileron(id, limitUp, limitDown, speed, acceleration);
+                createAileron(id, limitUp, limitDown, speed, acceleration);
             } else if(commandSplit[1].equalsIgnoreCase("SPLIT")){
                 //CREATE SPLIT FLAP <id> WITH LIMIT <angle> SPEED <speed> ACCELERATION <acceleration>
                 Identifier id = stringToIdentifier(commandSplit[3]);
                 Angle limit = doubleToAngle(Double.parseDouble(commandSplit[6]));
                 Speed speed = doubleToSpeed(Double.parseDouble(commandSplit[8]));
                 Acceleration acceleration = doubleToAcceleration(Double.parseDouble(commandSplit[10]));
-                //createFlap(id, limit, speed, acceleration)
+                createSplitFlap(id, limit, speed, acceleration);
             } else if(commandSplit[1].equalsIgnoreCase("FOWLER")){
                 //CREATE FOWLER FLAP <id> WITH LIMIT <angle> SPEED <speed> ACCELERATION <acceleration>
                 Identifier id = stringToIdentifier(commandSplit[3]);
                 Angle limit = doubleToAngle(Double.parseDouble(commandSplit[6]));
                 Speed speed = doubleToSpeed(Double.parseDouble(commandSplit[8]));
                 Acceleration acceleration = doubleToAcceleration(Double.parseDouble(commandSplit[10]));
-                //createFlap(id, limit, speed, acceleration);
+                createFowlerFlap(id, limit, speed, acceleration);
             } else if(commandSplit[1].equalsIgnoreCase("ENGINE")){
                 //CREATE ENGINE <id> WITH SPEED <speed> ACCELERATION <acceleration>
                 Identifier id = stringToIdentifier(commandSplit[2]);
                 Speed speed = doubleToSpeed(Double.parseDouble(commandSplit[5]));
                 Acceleration acceleration = doubleToAcceleration(Double.parseDouble(commandSplit[7]));
-                //createEngine(id, speed, acceleration);
+                createEngine(id, speed, acceleration);
             } else if(commandSplit[1].equalsIgnoreCase("NOSE")){
                 //CREATE NOSE GEAR <id> WITH SPEED <speed> ACCELERATION <acceleration>
                 Identifier id = stringToIdentifier(commandSplit[3]);
@@ -116,13 +116,13 @@ public class CommandParser{
                 //DECLARE RUDDER CONTROLLER <id1> WITH RUDDER <id2>
                 Identifier idController = stringToIdentifier(commandSplit[3]);
                 Identifier idRudder = stringToIdentifier(commandSplit[6]);
-                //declareRudderController(idController, idRudder);
+                declareRudderController(idController, idRudder);
             } else if(commandSplit[1].equalsIgnoreCase("ELEVATOR")){
                 //DECLARE ELEVATOR CONTROLLER <id1> WITH ELEVATORS <id2> <id3>
                 Identifier idController = stringToIdentifier(commandSplit[3]);
                 Identifier idElevatorLeft = stringToIdentifier(commandSplit[6]);
                 Identifier idElevatorRight = stringToIdentifier(commandSplit[7]);
-                //declareElevatorController(idController, idElevatorLeft, idElevatorRight);
+                declareElevatorController(idController, idElevatorLeft, idElevatorRight);
             } else if(commandSplit[1].equalsIgnoreCase("AILERON")){
                 //DECLARE AILERON CONTROLLER <id1> WITH AILERONS <idn>+ PRIMARY <idx> (SLAVE <idslave> TO <idmaster> BY <percent> PERCENT)*
                 Identifier idController = stringToIdentifier(commandSplit[3]);
@@ -150,7 +150,7 @@ public class CommandParser{
                 for(int i = 6; i < commandSplit.length; i++){
                     idFlaps.add(stringToIdentifier(commandSplit[i]));
                 }
-                //declareFlapController(idController, idFlaps);
+                declareFlapController(idController, idFlaps);
             } else if(commandSplit[1].equalsIgnoreCase("ENGINE")){
                 //DECLARE ENGINE CONTROLLER <id1> WITH ENGINE[S] <idn>+
                 Identifier idController = stringToIdentifier(commandSplit[3]);
@@ -163,9 +163,9 @@ public class CommandParser{
                 //DECLARE GEAR CONTROLLER <id1> WITH GEAR NOSE <id2> MAIN <id3> <id4>
                 Identifier idController = stringToIdentifier(commandSplit[3]);
                 Identifier idNose = stringToIdentifier(commandSplit[7]);
-                Identifier idMainleft = stringToIdentifier(commandSplit[9]);
+                Identifier idMainLeft = stringToIdentifier(commandSplit[9]);
                 Identifier idMainRight = stringToIdentifier(commandSplit[10]);
-                //call doDeclareGearController(idController, idNose, idMainLeft, idMainRight);
+                declareGearController(idController, idNose, idMainLeft, idMainRight);
             } else if(commandSplit[1].equalsIgnoreCase("BUS")){
                 //DECLARE BUS <id1> WITH CONTROLLER[S] <idn>+
                 Identifier idBus = stringToIdentifier(commandSplit[2]);
@@ -181,31 +181,96 @@ public class CommandParser{
             //call doCommit()
         } else if(commandSplit[0].equalsIgnoreCase("DO")){ //BEHAVIORAL COMMANDS
             if(commandSplit[3].equalsIgnoreCase("RUDDER")){
-                //call submitCommand() with an instance of CommandDoDeflectRudder
+            	//DO <id> DEFLECT RUDDER <angle> LEFT|RIGHT
+            	Identifier idController = stringToIdentifier(commandSplit[1]);
+            	Angle angle = doubleToAngle(Double.parseDouble(commandSplit[4]));
+            	boolean isRight = false;
+            	if(commandSplit[5].equalsIgnoreCase("Right")) {
+            		isRight = true;
+            	} else if(commandSplit[5].equalsIgnoreCase("LEFT")) {
+            		isRight = false;
+            	} else {
+            		throw new IOException("Invalid DoDeflectRudder input");
+            	}
+                deflectRudder(idController, angle, isRight);
             } else if(commandSplit[3].equalsIgnoreCase("ELEVATOR")){
-                //call submitCommand() with an instance of CommandDoDeflectElevator
+            	//DO <id> DEFLECT ELEVATOR <angle> UP|DOWN
+            	Identifier idController = stringToIdentifier(commandSplit[1]);
+            	Angle angle = doubleToAngle(Double.parseDouble(commandSplit[4]));
+            	boolean isDown = false;
+            	if(commandSplit[5].equalsIgnoreCase("DOWN")) {
+            		isDown = true;
+            	} else if(commandSplit[5].equalsIgnoreCase("UP")) {
+            		isDown = false;
+            	} else {
+            		throw new IOException("Invalid DoDeflectElevator input");
+            	}
+                deflectElevator(idController, angle, isDown);
             } else if(commandSplit[3].equalsIgnoreCase("AILERONS")){
-                //call submitCommand() with an instance of CommandDoDeflectAilerons
+            	//DO <id> DEFLECT AILERONS <angle> UP|DOWN
+            	Identifier idController = stringToIdentifier(commandSplit[1]);
+            	Angle angle = doubleToAngle(Double.parseDouble(commandSplit[4]));
+            	boolean isDown = false;
+            	if(commandSplit[5].equalsIgnoreCase("DOWN")) {
+            		isDown = true;
+            	} else if(commandSplit[5].equalsIgnoreCase("UP")) {
+            		isDown = false;
+            	} else {
+            		throw new IOException("Invalid DoDeflectAilerons input");
+            	}
+                //deflectAilerons(idController, angle, isDown);
             } else if(commandSplit[3].equalsIgnoreCase("BRAKE")){
-                //call submitCommand() with an instance of CommandDoDeploySpeedBrake
+            	//DO <id> SPEED BRAKE ON|OFF
+            	Identifier idController = stringToIdentifier(commandSplit[1]);
+            	boolean isDeployed = false;
+            	if(commandSplit[4].equalsIgnoreCase("ON")) {
+            		isDeployed = true;
+            	} else if(commandSplit[4].equalsIgnoreCase("OFF")) {
+            		isDeployed = false;
+            	} else {
+            		throw new IOException("Invalid DoDeploySpeedBrake input");
+            	}
+                //deploySpeedBrake(idController, isDeployed);
             } else if(commandSplit[3].equalsIgnoreCase("FLAP")){
-                //call submitCommand() with an instance of CommandDoSetFlaps
+            	//DO <id> DEFLECT FLAP <position>
+            	Identifier idController = stringToIdentifier(commandSplit[1]);
+            	Position position = intToPosition(Integer.parseInt(commandSplit[4]));
+                deflectFlap(idController, position);
             } else if(commandSplit[3].equalsIgnoreCase("POWER")){
                 if(commandSplit.length == 5){
-                    //call submitCommand() with an instance of CommandDoSetEnginePowerAll
+                	//DO <id> SET POWER <power>
+                	Identifier idController = stringToIdentifier(commandSplit[1]);
+                	Power power = doubleToPower(Double.parseDouble(commandSplit[4]));
+                    //setEnginePowerAll(idController, power);
                 } else if(commandSplit.length == 7){
-                    //call submitCommand() with an instance of CommandDoSetEnginePowerSingle
+                	//DO <id1> SET POWER <power> ENGINE <id2>
+                	Identifier idController = stringToIdentifier(commandSplit[1]);
+                	Power power = doubleToPower(Double.parseDouble(commandSplit[4]));
+                	Identifier idEngine = stringToIdentifier(commandSplit[6]);
+                    //setEnginePowerSingle(idController, power, idEngine);
                 } else {
                     throw new IOException("SET POWER command has incorrect length");
                 }
             } else if(commandSplit[2].equalsIgnoreCase("GEAR")){
-                //call submitCommand() with an instance of CommandDoSelectGear
+            	//DO <id> GEAR UP|DOWN
+            	Identifier idController = stringToIdentifier(commandSplit[1]);
+            	boolean isDown = false;
+            	if(commandSplit[3].equalsIgnoreCase("DOWN")) {
+            		isDown = true;
+            	} else if(commandSplit[3].equalsIgnoreCase("UP")) {
+            		isDown = false;
+            	} else {
+            		throw new IOException("Invalid DoSelectGear input");
+            	}
+            	gearPosition(idController, isDown);
             } else {
                 throw new IOException("Invalid DO command input");
             }
 
         } else if(commandSplit[0].equalsIgnoreCase("HALT")){
-            //call submitCommand() with an instance of CommandDoHalt
+        	//HALT <id>
+        	Identifier idController = stringToIdentifier(commandSplit[1]);
+            //doHalt(idController);
         } else if(commandSplit[0].charAt(0) == '@'){ //MISCELLANEOUS COMMANDS
             if(commandSplit[0].equalsIgnoreCase("@CLOCK")){
                 if(commandSplit.length == 2){
@@ -217,22 +282,41 @@ public class CommandParser{
                     }
                     isNumber = true;
                     if(isNumber == true) {
-                        //call submitCommand() with an instance of CommandDoSetClockRate
+                    	//@CLOCK <rate>
+                    	Rate rate = intToRate(Integer.parseInt(commandSplit[1]));
+                        //setClockRate(rate);
                     } else {
-                        //I may need to split this up even more to account for pause|resume|update
-                        //call submitCommand() with an instance of CommandDoSetClockRunning or CommandDoClockUpdate
+                    	//@CLOCK PAUSE|RESUME|UPDATE
+                    	boolean isRunning = false;
+                    	if(commandSplit[1].equalsIgnoreCase("PAUSE")) {
+                    		isRunning = false;
+                    		//setClockRunning(isRunning);
+                    	} else if(commandSplit[1].equalsIgnoreCase("RESUME")) {
+                    		isRunning = true;
+                    		//setClockRunning(isRunning);
+                    	} else if(commandSplit[1].equalsIgnoreCase("UPDATE")) {
+                    		//doClockUpdate();
+                    	} else {
+                    		throw new IOException("Invalid @CLOCK input");
+                    	}
                     }
                 } else if(commandSplit.length == 1){
-                    //call submitCommand() with an instance of CommandDoShowClock
+                	//@CLOCK
+                    //showClock();
                 } else {
                     throw new IOException("Invalid @CLOCK input length");
                 }
             } else if(commandSplit[0].equalsIgnoreCase("@RUN")){
-                //call submitCommand() with an instance of CommandDoRunCommandFile
+            	//@RUN "<filename>"
+            	String fileName = commandSplit[1].substring(1, commandSplit[1].length() - 2);
+                //runCommandFile(filename);
             } else if(commandSplit[0].equalsIgnoreCase("@EXIT")){
-                //call submitCommand() with an instance of CommandDoExit
+            	//@EXIT
+            	exit();
             } else if(commandSplit[0].equalsIgnoreCase("@WAIT")){
-                //call submitCommand() with an instance of commandDoWait
+            	//@WAIT <rate>
+            	Rate rate = intToRate(Integer.parseInt(commandSplit[1]));
+                doWait(rate);
             } else {
                 throw new IOException("Invalid MISCELLANEOUS command");
             }
@@ -493,7 +577,7 @@ public class CommandParser{
     // Input: @WAIT <rate>
     // Action: Waits rate milliseconds before executing the next behavioral command. This command is not valid until after @commit.
     //      This calls submitCommand() with an instance of CommandDoWait.
-    public void wait(Rate rate){
+    public void doWait(Rate rate){
     	CommandLineInterface cli = new CommandLineInterface();
     	ActionSet actionSet = new ActionSet(cli);
     	ActionMiscellaneous action = actionSet.getActionMiscellaneous();
