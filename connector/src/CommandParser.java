@@ -10,6 +10,7 @@ import sbw.project.cli.action.ActionBehavioral;
 import sbw.project.cli.action.ActionSet;
 import sbw.project.cli.action.ActionMiscellaneous;
 import sbw.project.cli.action.command.behavioral.CommandDoSelectGear;
+import sbw.project.cli.action.command.behavioral.CommandDoSetFlaps;
 import sbw.project.cli.action.command.misc.CommandDoExit;
 
 public class CommandParser{
@@ -425,17 +426,15 @@ public class CommandParser{
   //		    the deflection range. 
   //		    This calls submitCommand() with an instance of CommandDoSetFlaps. 
     public void deflectFlap(Identifier id, Position position) { 
-    	
     	CommandLineInterface cli = new CommandLineInterface(); 
     	
     	ActionSet actions = new ActionSet(cli); 
     	
-    	ActionMiscellaneous action = actions.getActionMiscellaneous(); 
+    	ActionBehavioral action = actions.getActionBehavioral(); 
     	
     	CommandDoSetFlaps flapsCommand = new CommandDoSetFlaps(id, position); 
     	
     	action.submitCommand(flapsCommand); 
-    	
     }
     
     // Input: DO <id> SET POWER <power>
@@ -451,7 +450,6 @@ public class CommandParser{
     // Action: Requests that gear controller id respectively raise or lower its gear.
     //         This calls submitCommand() with an instance of CommandDoSelectGear
     public void gearPosition (Identifier id, boolean isDown) {
-    	
     	CommandLineInterface cli = new CommandLineInterface(); 
     	
     	ActionSet actions = new ActionSet(cli); 
@@ -460,15 +458,13 @@ public class CommandParser{
     	
     	CommandDoSelectGear gearCommand = new CommandDoSelectGear(id, isDown); 
     	
-    	action.submitCommand(gearCommand);
-    	
+    	action.submitCommand(gearCommand);	
     }
     
     // Input: @EXIT
     // Action: exits the system
     //         this calls submitCommand() with an instance of 'CommandDoExit'
     public void exit(){
-
         // Create a new CommandLineInterface to construct an ActionSet
         CommandLineInterface cli = new CommandLineInterface();
         // Create a new ActionSet to access the protected ActionMiscellaneous constructor
@@ -480,8 +476,6 @@ public class CommandParser{
 
         // Submit the exit command designed for a miscellaneous action
         action.submitCommand(exitCommand);
-
-
     }
 
 }
