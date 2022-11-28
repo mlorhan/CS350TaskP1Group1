@@ -13,6 +13,7 @@ import sbw.project.cli.action.command.behavioral.CommandDoDeflectRudder;
 import sbw.project.cli.action.command.behavioral.CommandDoSelectGear;
 import sbw.project.cli.action.command.behavioral.CommandDoSetFlaps;
 import sbw.project.cli.action.command.misc.CommandDoExit;
+import sbw.project.cli.action.command.misc.CommandDoShowClock;
 import sbw.project.cli.action.command.misc.CommandDoWait;
 
 public class CommandParser{
@@ -572,15 +573,9 @@ public class CommandParser{
     // Action: Outputs the clock rate to the command-line interface as “clock = <rate>”, or “clock = paused” if it is not running.
     //			This calls submitCommand() with an instance of CommandDoShowClock.
     public void showClock() {
-    	CommandLineInterface cli = new CommandLineInterface();
-    	
-    	ActionSet actionSet = new ActionSet(cli);
-    	
-    	ActionMiscellaneous action = actionSet.getActionMiscellaneous();
-    	
     	CommandDoShowClock showClock = new CommandDoShowClock();
     	
-    	action.submitCommand(showClock);
+    	this.actionMiscellaneous.submitCommand(showClock);
     }
     
     // Input: @EXIT
