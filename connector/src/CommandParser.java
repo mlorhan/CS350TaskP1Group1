@@ -9,6 +9,7 @@ import sbw.project.cli.action.ActionStructural;
 import sbw.project.cli.action.ActionBehavioral;
 import sbw.project.cli.action.ActionSet;
 import sbw.project.cli.action.ActionMiscellaneous;
+import sbw.project.cli.action.command.behavioral.CommandDoDeflectRudder;
 import sbw.project.cli.action.command.behavioral.CommandDoSelectGear;
 import sbw.project.cli.action.command.behavioral.CommandDoSetFlaps;
 import sbw.project.cli.action.command.misc.CommandDoExit;
@@ -289,22 +290,21 @@ public class CommandParser{
         return newSlaveMix;
     }
 
+    
+    /*****CREATIONAL COMMANDS*****/
+    
     // Input: CREATE RUDDER <id> WITH LIMIT <angle> SPEED <speed> ACCELERATION <acceleration>
     // Action: Creates an ActuatorRudder with identifier id that deflects angle degrees left (negative) or right (positive) from neutral (0 degrees) at maximum speed speed and acceleration acceleration.
     //         This calls doCreateRudder(), which creates and registers an instance of ActuatorRudder.
     public void createRudder(Identifier id, Angle angle, Speed speed, Acceleration acceleration){
-
         actionCreational.doCreateRudder(id, angle, speed, acceleration);
-
     }
 
     // Input: CREATE ELEVATOR <id> WITH LIMIT <angle> SPEED <speed> ACCELERATION <acceleration> 
     // Action: Creates an ActuatorElevator with identifier id that deflects angle degrees up (positive) or down (negative) from neutral (0 degrees) at maximum speed speed and acceleration acceleration.
     //         This calls doCreateElevator(), which creates and registers an instance of ActuatorElevator.
     public void createElevator(Identifier id, Angle angle, Speed speed, Acceleration acceleration){
-
         actionCreational.doCreateElevator(id, angle, speed, acceleration);
-
     }
 
     // Input: CREATE AILERON <id> WITH LIMIT UP <angle1> DOWN <angle2> SPEED <speed> ACCELERATION <acceleration>
@@ -346,6 +346,8 @@ public class CommandParser{
     	actionCreational.doCreateFlap(id, true, angle1, speed, acceleration);
     
     }
+    
+    /*****STRUCTURAL COMMANDS*****/
     
     // Input: DECLARE RUDDER CONTROLLER <id1> WITH RUDDER <id2>
     // Action: Creates a ControllerRudder with identifier id1 containing rudder id2.
@@ -408,6 +410,30 @@ public class CommandParser{
     	
     	actionStructural.doDeclareGearController(id1, id2, id3, id4);
     
+    }
+    
+    /*****BEHAVIORAL COMMANDS*****/
+    
+    // Input: DO <id> DEFLECT RUDDER <angle> LEFT|RIGHT
+    // Action: Requests that rudder controller id deflect its rudder respectively left or right to angle angle.
+    //    	This calls submitCommand() with an instance of CommandDoDeflectRudder.
+    public void deflectRudder(Identifier idController, Angle angle, boolean isRight){
+    	CommandLineInterface cli = new CommandLineInterface();
+    	ActionSet actionSet = new ActionSet(cli);
+    	ActionBehavioral action = actionSet.getActionBehavioral();
+    	CommandDoDeflectRudder rudderCommand = new CommandDoDeflectRudder(idController, angle, isRight);
+    	action.submitCommand(rudderCommand);
+    }
+    
+    // Input: DO <id> DEFLECT ELEVATOR <angle> UP|DOWN
+    // Action: Requests that elevator controller id deflect its elevators respectively up or down to angle angle.
+    //    	This calls submitCommand() with an instance of CommandDoDeflectElevator
+    public void deflectElevator(Identifier idController, Angle angle, boolean isDown){
+    	CommandLineInterface cli = new CommandLineInterface();
+    	ActionSet actionSet = new ActionSet(cli);
+    	ActionBehavioral action = actionSet.getActionBehavioral();
+    	CommandDoDeflectRudder rudderCommand = new CommandDoDeflectRudder(idController, angle, isDown);
+    	action.submitCommand(rudderCommand);
     }
     
     // Input: DO <id> DEFLECT AILERONS <angle> UP|DOWN
