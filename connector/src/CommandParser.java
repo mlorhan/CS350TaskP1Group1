@@ -585,6 +585,21 @@ public class CommandParser{
     	action.submitCommand(waitCommand);
     }
     
+    // Input: @CLOCK
+    // Action: Outputs the clock rate to the command-line interface as “clock = <rate>”, or “clock = paused” if it is not running.
+    //			This calls submitCommand() with an instance of CommandDoShowClock.
+    public void showClock() {
+    	CommandLineInterface cli = new CommandLineInterface();
+    	
+    	ActionSet actionSet = new ActionSet(cli);
+    	
+    	ActionMiscellaneous action = actionSet.getActionMiscellaneous();
+    	
+    	CommandDoShowClock showClock = new CommandDoShowClock();
+    	
+    	action.submitCommand(showClock);
+    }
+    
     // Input: @EXIT
     // Action: exits the system
     //         this calls submitCommand() with an instance of 'CommandDoExit'
