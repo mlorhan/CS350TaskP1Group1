@@ -34,12 +34,16 @@ public class CommandParser{
         //split the input by semicolon so multiple commands can be entered with one input
         String[] semiSplit = this.command.split(";", 0);
 
-        //for each command, split the command by spaces and figure out what each command is trying to do
+        //for each command, split it up if there are any comments so I don't have to deal with them anymore
+        //also split the command by spaces and figure out what each command is trying to do
         for(int i = 0; i < semiSplit.length; i++){
+            String commentSplit = semiSplit[i].split("//", 0)[0];
+
             //" +" is RegEx that should make it so empty strings are not included in the string array
-            String[] commandSplit = semiSplit[i].split(" +", 0);
+            String[] commandSplit = commentSplit.split(" +", 0);
             parseHelper(commandSplit);
         }
+
     }
 
     public void parseHelper(String[] commandSplit) throws IOException{
@@ -126,8 +130,7 @@ public class CommandParser{
                 Identifier idAileronPrimary = stringToIdentifier(commandSplit[i]);
                 i++;
                 List<AileronSlaveMix> slaveMixes = new ArrayList<AileronSlaveMix>();
-                // probably going to split the commands more to get rid of comments so I don't have to deal with them anymore
-                /* 
+                /*
                 if(commandSplit.length >= i) {
                     if(!commandSplit[i].startsWith("//")){
                         for(i; i < commandSplit.length && !commandSplit[i].startsWith("//"); i++){
@@ -141,7 +144,7 @@ public class CommandParser{
                 //DECLARE FLAP CONTROLLER <id> WITH FLAPS <idn>+
                 Identifier idController = stringToIdentifier(commandSplit[3]);
                 List<Identifier> idFlaps = new ArrayList<Identifier>();
-                for(int i = 6; i < commandSplit.length && !commandSplit[i].startsWith("//"); i++){
+                for(int i = 6; i < commandSplit.length; i++){
                     idFlaps.add(stringToIdentifier(commandSplit[i]));
                 }
                 //declareFlapController(idController, idFlaps);
@@ -149,7 +152,7 @@ public class CommandParser{
                 //DECLARE ENGINE CONTROLLER <id1> WITH ENGINE[S] <idn>+
                 Identifier idController = stringToIdentifier(commandSplit[3]);
                 List<Identifier> idEngines = new ArrayList<Identifier>();
-                for(int i = 6; i < commandSplit.length && !commandSplit[i].startsWith("//"); i++){
+                for(int i = 6; i < commandSplit.length; i++){
                     idEngines.add(stringToIdentifier(commandSplit[i]));
                 }
                 //call doDeclareEngineController(idController, idEngines)
@@ -164,7 +167,7 @@ public class CommandParser{
                 //DECLARE BUS <id1> WITH CONTROLLER[S] <idn>+
                 Identifier idBus = stringToIdentifier(commandSplit[2]);
                 List<Identifier> idControllers = new ArrayList<Identifier>();
-                for(int i = 5; i < commandSplit.length && !commandSplit[i].startsWith("//"); i++){
+                for(int i = 5; i < commandSplit.length; i++){
                     idControllers.add(stringToIdentifier(commandSplit[i]));
                 }
                 //call declareBus(idBus, idControllers)
@@ -185,9 +188,9 @@ public class CommandParser{
             } else if(commandSplit[3].equalsIgnoreCase("FLAP")){
                 //call submitCommand() with an instance of CommandDoSetFlaps
             } else if(commandSplit[3].equalsIgnoreCase("POWER")){
-                if(commandSplit.length == 5 || ((commandSplit.length > 5) && (commandSplit[5].startsWith("//")))){
+                if(commandSplit.length == 5){
                     //call submitCommand() with an instance of CommandDoSetEnginePowerAll
-                } else if(commandSplit.length >= 7){
+                } else if(commandSplit.length == 7){
                     //call submitCommand() with an instance of CommandDoSetEnginePowerSingle
                 } else {
                     throw new IOException("SET POWER command has incorrect length");
@@ -202,7 +205,7 @@ public class CommandParser{
             //call submitCommand() with an instance of CommandDoHalt
         } else if(commandSplit[0].charAt(0) == '@'){ //MISCELLANEOUS COMMANDS
             if(commandSplit[0].equalsIgnoreCase("@CLOCK")){
-                if(commandSplit.length == 2 || ((commandSplit.length > 2) && (commandSplit[2].startsWith("//")))){
+                if(commandSplit.length == 2){
                     boolean isNumber;
                     try {
                         double d = Double.parseDouble(commandSplit[1]);
@@ -216,7 +219,7 @@ public class CommandParser{
                         //I may need to split this up even more to account for pause|resume|update
                         //call submitCommand() with an instance of CommandDoSetClockRunning or CommandDoClockUpdate
                     }
-                } else if(commandSplit.length == 1 || ((commandSplit.length > 1) && (commandSplit[1].startsWith("//")))){
+                } else if(commandSplit.length == 1){
                     //call submitCommand() with an instance of CommandDoShowClock
                 } else {
                     throw new IOException("Invalid @CLOCK input length");
