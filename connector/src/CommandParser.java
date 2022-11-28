@@ -21,6 +21,8 @@ public class CommandParser{
     public String command;
     public ActionCreational actionCreational;
     public ActionStructural actionStructural;
+    public ActionBehavioral actionBehavioral;
+    public ActionMiscellaneous actionMiscellaneous;
     
     // create your parser
     // the ActionSet and command string are provided to you automatically.
@@ -31,6 +33,8 @@ public class CommandParser{
         this.command = command;
         this.actionCreational = actionSet.getActionCreational();
         this.actionStructural = actionSet.getActionStructural();
+        this.actionBehavioral = actionSet.getActionBehavioral();
+        this.actionMiscellaneous = actionSet.getActionMiscellaneous();
 
     }
 
@@ -503,22 +507,16 @@ public class CommandParser{
     // Action: Requests that rudder controller id deflect its rudder respectively left or right to angle angle.
     //    	This calls submitCommand() with an instance of CommandDoDeflectRudder.
     public void deflectRudder(Identifier idController, Angle angle, boolean isRight){
-    	CommandLineInterface cli = new CommandLineInterface();
-    	ActionSet actionSet = new ActionSet(cli);
-    	ActionBehavioral action = actionSet.getActionBehavioral();
     	CommandDoDeflectRudder rudderCommand = new CommandDoDeflectRudder(idController, angle, isRight);
-    	action.submitCommand(rudderCommand);
+    	this.actionBehavioral.submitCommand(rudderCommand);
     }
     
     // Input: DO <id> DEFLECT ELEVATOR <angle> UP|DOWN
     // Action: Requests that elevator controller id deflect its elevators respectively up or down to angle angle.
     //    	This calls submitCommand() with an instance of CommandDoDeflectElevator
     public void deflectElevator(Identifier idController, Angle angle, boolean isDown){
-    	CommandLineInterface cli = new CommandLineInterface();
-    	ActionSet actionSet = new ActionSet(cli);
-    	ActionBehavioral action = actionSet.getActionBehavioral();
     	CommandDoDeflectRudder rudderCommand = new CommandDoDeflectRudder(idController, angle, isDown);
-    	action.submitCommand(rudderCommand);
+    	this.actionBehavioral.submitCommand(rudderCommand);
     }
     
     // Input: DO <id> DEFLECT AILERONS <angle> UP|DOWN
@@ -537,15 +535,9 @@ public class CommandParser{
   //		    the deflection range. 
   //		    This calls submitCommand() with an instance of CommandDoSetFlaps. 
     public void deflectFlap(Identifier id, Position position) { 
-    	CommandLineInterface cli = new CommandLineInterface(); 
-    	
-    	ActionSet actions = new ActionSet(cli); 
-    	
-    	ActionBehavioral action = actions.getActionBehavioral(); 
-    	
     	CommandDoSetFlaps flapsCommand = new CommandDoSetFlaps(id, position); 
     	
-    	action.submitCommand(flapsCommand); 
+    	this.actionBehavioral.submitCommand(flapsCommand); 
     }
     
     // Input: DO <id> SET POWER <power>
@@ -560,16 +552,10 @@ public class CommandParser{
     // Input: DO <id> GEAR UP|DOWN 
     // Action: Requests that gear controller id respectively raise or lower its gear.
     //         This calls submitCommand() with an instance of CommandDoSelectGear
-    public void gearPosition (Identifier id, boolean isDown) {
-    	CommandLineInterface cli = new CommandLineInterface(); 
-    	
-    	ActionSet actions = new ActionSet(cli); 
-    	
-    	ActionBehavioral action = actions.getActionBehavioral(); 
-    	
+    public void gearPosition (Identifier id, boolean isDown) {    	
     	CommandDoSelectGear gearCommand = new CommandDoSelectGear(id, isDown); 
     	
-    	action.submitCommand(gearCommand);	
+    	this.actionBehavioral.submitCommand(gearCommand);	
     }
     
     /*****MISCELLANEOUS COMMANDS*****/
@@ -578,28 +564,19 @@ public class CommandParser{
     // Action: Waits rate milliseconds before executing the next behavioral command. This command is not valid until after @commit.
     //      This calls submitCommand() with an instance of CommandDoWait.
     public void doWait(Rate rate){
-    	CommandLineInterface cli = new CommandLineInterface();
-    	ActionSet actionSet = new ActionSet(cli);
-    	ActionMiscellaneous action = actionSet.getActionMiscellaneous();
     	CommandDoWait waitCommand = new CommandDoWait(rate);
-    	action.submitCommand(waitCommand);
+    	this.actionMiscellaneous.submitCommand(waitCommand);
     }
     
     // Input: @EXIT
     // Action: exits the system
     //         this calls submitCommand() with an instance of 'CommandDoExit'
     public void exit(){
-        // Create a new CommandLineInterface to construct an ActionSet
-        CommandLineInterface cli = new CommandLineInterface();
-        // Create a new ActionSet to access the protected ActionMiscellaneous constructor
-        ActionSet actions = new ActionSet(cli);
-        // Create a new ActionMiscellaneous to access the protected submitCommand()
-        ActionMiscellaneous action = actions.getActionMiscellaneous();
         // Create a new exitCommand() to direct the submitCommand()
         CommandDoExit exitCommand = new CommandDoExit();
 
         // Submit the exit command designed for a miscellaneous action
-        action.submitCommand(exitCommand);
+        this.actionMiscellaneous.submitCommand(exitCommand);
     }
 
 }
