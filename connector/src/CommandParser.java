@@ -9,8 +9,10 @@ import sbw.project.cli.action.ActionStructural;
 import sbw.project.cli.action.ActionBehavioral;
 import sbw.project.cli.action.ActionSet;
 import sbw.project.cli.action.ActionMiscellaneous;
+import sbw.project.cli.action.command.behavioral.CommandDoDeflectAilerons;
 import sbw.project.cli.action.command.behavioral.CommandDoDeflectRudder;
 import sbw.project.cli.action.command.behavioral.CommandDoSelectGear;
+import sbw.project.cli.action.command.behavioral.CommandDoSetEnginePowerAll;
 import sbw.project.cli.action.command.behavioral.CommandDoSetFlaps;
 import sbw.project.cli.action.command.misc.CommandDoExit;
 import sbw.project.cli.action.command.misc.CommandDoShowClock;
@@ -147,7 +149,7 @@ public class CommandParser{
                         slaveMixes.add(newSlaveMix);
                     }
                 }
-                //declareAileronController(idController, idAilerons, idAileronPrimary, slaveMixes);
+                declareAileronController(idController, idAilerons, idAileronPrimary, slaveMixes);
             } else if(commandSplit[1].equalsIgnoreCase("FLAP")){
                 //DECLARE FLAP CONTROLLER <id> WITH FLAPS <idn>+
                 Identifier idController = stringToIdentifier(commandSplit[3]);
@@ -163,7 +165,7 @@ public class CommandParser{
                 for(int i = 6; i < commandSplit.length; i++){
                     idEngines.add(stringToIdentifier(commandSplit[i]));
                 }
-                //call doDeclareEngineController(idController, idEngines)
+                declareEngineController(idController, idEngines);
             } else if(commandSplit[1].equalsIgnoreCase("GEAR")){
                 //DECLARE GEAR CONTROLLER <id1> WITH GEAR NOSE <id2> MAIN <id3> <id4>
                 Identifier idController = stringToIdentifier(commandSplit[3]);
@@ -223,7 +225,7 @@ public class CommandParser{
             	} else {
             		throw new IOException("Invalid DoDeflectAilerons input");
             	}
-                //deflectAilerons(idController, angle, isDown);
+                deflectAilerons(idController, angle, isDown);
             } else if(commandSplit[3].equalsIgnoreCase("BRAKE")){
             	//DO <id> SPEED BRAKE ON|OFF
             	Identifier idController = stringToIdentifier(commandSplit[1]);
@@ -387,14 +389,14 @@ public class CommandParser{
     // Action: Creates an ActuatorRudder with identifier id that deflects angle degrees left (negative) or right (positive) from neutral (0 degrees) at maximum speed speed and acceleration acceleration.
     //         This calls doCreateRudder(), which creates and registers an instance of ActuatorRudder.
     public void createRudder(Identifier id, Angle angle, Speed speed, Acceleration acceleration){
-        actionCreational.doCreateRudder(id, angle, speed, acceleration);
+        this.actionCreational.doCreateRudder(id, angle, speed, acceleration);
     }
 
     // Input: CREATE ELEVATOR <id> WITH LIMIT <angle> SPEED <speed> ACCELERATION <acceleration> 
     // Action: Creates an ActuatorElevator with identifier id that deflects angle degrees up (positive) or down (negative) from neutral (0 degrees) at maximum speed speed and acceleration acceleration.
     //         This calls doCreateElevator(), which creates and registers an instance of ActuatorElevator.
     public void createElevator(Identifier id, Angle angle, Speed speed, Acceleration acceleration){
-        actionCreational.doCreateElevator(id, angle, speed, acceleration);
+        this.actionCreational.doCreateElevator(id, angle, speed, acceleration);
     }
 
     // Input: CREATE AILERON <id> WITH LIMIT UP <angle1> DOWN <angle2> SPEED <speed> ACCELERATION <acceleration>
@@ -402,7 +404,7 @@ public class CommandParser{
     //         this calls doCreateAileron(), which creates and registers an instance of 'ActuatorAileron'
     public void createAileron(Identifier id, Angle angle1, Angle angle2, Speed speed, Acceleration acceleration){
 
-        actionCreational.doCreateAileron(id, angle1, angle2, speed, acceleration);
+        this.actionCreational.doCreateAileron(id, angle1, angle2, speed, acceleration);
 
     }
 
@@ -412,7 +414,7 @@ public class CommandParser{
     //         this calls doCreateEngine(), which creates and registers an instance of 'ActuatorEngine'
     public void createEngine(Identifier id, Speed speed, Acceleration acceleration){
 
-        actionCreational.doCreateEngine(id, speed, acceleration);
+        this.actionCreational.doCreateEngine(id, speed, acceleration);
 
     }
     
@@ -422,7 +424,7 @@ public class CommandParser{
     // 		  This calls doCreateFlap(), which creates and registers an instance of ActuatorFlapSplit.
     public void createSplitFlap(Identifier id, Angle angle1, Speed speed, Acceleration acceleration) {
     		
-    	actionCreational.doCreateFlap(id, false, angle1, speed, acceleration);
+    	this.actionCreational.doCreateFlap(id, false, angle1, speed, acceleration);
     
     }
     
@@ -433,7 +435,7 @@ public class CommandParser{
     // 		  This calls doCreateFlap(), which creates and registers an instance of ActuatorFlapFowler.
     public void createFowlerFlap(Identifier id, Angle angle1, Speed speed, Acceleration acceleration) {
     	
-    	actionCreational.doCreateFlap(id, true, angle1, speed, acceleration);
+    	this.actionCreational.doCreateFlap(id, true, angle1, speed, acceleration);
     
     }
     
@@ -443,14 +445,14 @@ public class CommandParser{
     // Action: Creates a ControllerRudder with identifier id1 containing rudder id2.
     //     This calls doDeclareRudderController(), which creates and registers an instance of ControllerRudder
     public void declareRudderController(Identifier idController, Identifier idRudder){
-        actionStructural.doDeclareRudderController(idController, idRudder);
+        this.actionStructural.doDeclareRudderController(idController, idRudder);
     }
 
     // Input: DECLARE ELEVATOR CONTROLLER <id1> WITH ELEVATORS <id2> <id3>
     // Action: Creates a ControllerElevator with identifier id1 containing elevators id2 (left) and id3 (right), which must be identical in configuration.
     //     This calls doDeclareElevatorController(), which creates and registers an instance of ControllerElevator.
     public void declareElevatorController(Identifier idController, Identifier idElevatorLeft, Identifier idElevatorRight){
-        actionStructural.doDeclareElevatorController(idController, idElevatorLeft, idElevatorRight);
+        this.actionStructural.doDeclareElevatorController(idController, idElevatorLeft, idElevatorRight);
     }
 
 
@@ -464,10 +466,8 @@ public class CommandParser{
     //         any chain of mixing is possible, but there are no cyclical relationships
     //         aileron configurations must be symmetrically identical
     //         this calls two variants of doDeclareAileronController(), which creates and registers an instance of 'ControllerAileron'
-    public void declareAileronController(Identifier id1, Identifier idn, Identifier idx, Identifier idslave, Identifier idmaster, Percent percent){
-
-
-
+    public void declareAileronController(Identifier idController, List<Identifier> idAilerons, Identifier idAileronPrimary, List<AileronSlaveMix> slaveMixes){
+    	this.actionStructural.doDeclareAileronController(idController, idAilerons, idAileronPrimary, slaveMixes);
     }
 
     //	Input: DECLARE FLAP CONTROLLER <id> WITH FLAPS <idn>+
@@ -476,7 +476,7 @@ public class CommandParser{
     //		  This calls doDeclareFlapController(), which creates and registers an instance of ControllerFlap.
     public void declareFlapController(Identifier id1, List<Identifier> idn) {
     	
-    	actionStructural.doDeclareFlapController(id1, idn);
+    	this.actionStructural.doDeclareFlapController(id1, idn);
     
     }
     
@@ -486,9 +486,9 @@ public class CommandParser{
     // Action: creates a 'ControllerEngine' with identifier 'id1' containing engines 'idn,' arrayed left to right in order, with identical configurations
     //         the plural form of ENGINE need not correspond grammatically to n
     //         this calls doDeclareEngineController(), which creates and registers an instance of 'ControllerEngine'
-    public void declareEngineController(Identifier id1, List<Identifier> idn){
+    public void declareEngineController(Identifier idController, List<Identifier> idEngines){
 
-
+    	this.actionStructural.doDeclareEngineController(idController, idEngines);
 
     }
     
@@ -498,7 +498,7 @@ public class CommandParser{
     //		  This calls doDeclareGearController(), which creates and registers an instance of ControllerGear.
     public void declareGearController (Identifier id1, Identifier id2, Identifier id3, Identifier id4) {
     	
-    	actionStructural.doDeclareGearController(id1, id2, id3, id4);
+    	this.actionStructural.doDeclareGearController(id1, id2, id3, id4);
     
     }
     
@@ -525,10 +525,9 @@ public class CommandParser{
     //         the opposite ailerons will deflect in the other direction
     //         the slave ailerons will derive their angles as specified in the slave clause in II.3.a, if one was given; otherwise, the relationship is 100%.
     //         this calls submitCommand() with an instance of 'CommandDoDeflectAilerons'
-    public void deflectAileron(Identifier id, Angle angle){
-
-
-
+    public void deflectAilerons(Identifier id, Angle angle, boolean isDown){
+    	CommandDoDeflectAilerons aileronCommand = new CommandDoDeflectAilerons(id, angle, isDown);
+    	this.actionBehavioral.submitCommand(aileronCommand);
     }
 
   //	Input: DO <id> DEFLECT FLAP <position>
@@ -545,9 +544,9 @@ public class CommandParser{
     // Action: requests that engine controller 'id' set the power of all engines to power 'power'
     //         this calls submitCommand() with an instance of 'CommandDoSetEnginePowerAll'
     public void enginePower(Identifier id, Power power){
+    	CommandDoSetEnginePowerAll engineCommand = new CommandDoSetEnginePowerAll(id, power);
 
-
-
+    	this.actionBehavioral.submitCommand(engineCommand);
     }
     
     // Input: DO <id> GEAR UP|DOWN 
