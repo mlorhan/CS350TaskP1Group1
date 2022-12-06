@@ -41,6 +41,13 @@ public class CommandParser{
 
     }
 
+    public static void main(String[] args)
+    {
+       CommandLineInterface cli = new CommandLineInterface();
+          
+       cli.execute();      
+    }
+
     // do the parsing
     public void parse() throws IOException{
         //split the input by semicolon so multiple commands can be entered with one input
